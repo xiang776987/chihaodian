@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="jar://E:/work2/mobild/scsl_mobile/trunk/scsloa_new/src/apollo/lib/src/apollo-form-api-6.5.9-20161121.033303-3-sources.jar!/com/rizon/eims/form/dao/FormBeanDao.java" charset="GB18030" />
+    <file url="jar://E:/work2/mobild/scsl_mobile/trunk/scsloa_new/src/apollo/lib/src/apollo-form-api-6.5.9-20161121.033303-3-sources.jar!/com/rizon/eims/form/dao/FormBeanDataDao.java" charset="GB18030" />
+    <file url="jar://E:/work2/mobild/scsl_mobile/trunk/scsloa_new/src/apollo/lib/src/apollo-form-api-6.5.9-20161121.033303-3-sources.jar!/com/rizon/eims/form/dao/event/FormBeanEvent.java" charset="GB18030" />
+    <file url="jar://E:/work2/mobild/scsl_mobile/trunk/scsloa_new/src/apollo/lib/src/apollo-form-api-6.5.9-20161121.033303-3-sources.jar!/com/rizon/eims/form/dao/event/PostFormBeanCreateEvent.java" charset="GB18030" />
+  </component>
+</project>

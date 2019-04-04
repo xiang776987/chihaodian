@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="chihaodian:war exploded">
+    <output-path>$PROJECT_DIR$/classes/artifacts/chihaodian_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="chihaodian" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="chihaodian/web/Web" />
+    </root>
+  </artifact>
+</component>
