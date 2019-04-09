@@ -45,25 +45,25 @@
 <div class="sy-info1" style="border-bottom:4px solid #E6E6E6;">
         <ul class="info-img">
             <li>
-            	<a href="secGoodsList.html?is_recommend=1" class="img-1" ><img  src="images/b1.png" style="width:42px;height: 42px"> </a>
+            	<a href="secGoodsList.html?is_recommend=1" class="img-1" >  </a>
                 <a href="secGoodsList.html?is_recommend=1" class="img-txt">每周精选</a> 
             </li>
             <li>
-            	<a href="category.html?ctg_id=23" class="img-1" > <img  src="images/b2.png" style="width:42px;height: 42px"></a>
-                <a href="category.html?ctg_id=23" class="img-txt">活力鲜果</a> 
+            	<a href="category.html?ctg_id=23" class="img-1" >  </a>
+                <a href="category.html?ctg_id=23" class="img-txt">周边游</a>
             </li>
             <li>
-            	<a href="category.html?ctg_id=21" class="img-1" style=""><img  src="images/b3.png" style="width:42px;height: 42px"></a>
-                <a href="category.html?ctg_id=21" class="img-txt">五谷杂粮</a>
+            	<a href="category.html?ctg_id=21" class="img-1" style=""> </a>
+                <a href="category.html?ctg_id=21" class="img-txt">好吃的</a>
             </li>
             <li>
-            	<a href="menuList.html" class="img-1" ><img  src="images/b4.png" style="width:42px;height: 42px"></a>
-                <a href="menuList.html" class="img-txt">蔬菜会员</a>
+            	<a href="menuList.html" class="img-1" > </a>
+                <a href="menuList.html" class="img-txt">特产</a>
 
             </li>
              <li>
-            	<a href="category.html?ctg_id=22" class="img-1" ><img  src="images/b5.png" style="width:42px;height: 42px"></a>
-                <a href="category.html?ctg_id=22" class="img-txt">肉禽蛋类</a> 
+            	<a href="category.html?ctg_id=22" class="img-1" > </a>
+                <a href="category.html?ctg_id=22" class="img-txt">熊孩子</a>
             </li>
         </ul>
         

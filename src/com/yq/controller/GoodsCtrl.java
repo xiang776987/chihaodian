@@ -1,5 +1,6 @@
 package com.yq.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,20 +12,17 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.yq.service.*;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.yq.service.AddressService;
-import com.yq.service.CategoryService;
-import com.yq.service.CouponsService;
-import com.yq.service.FreightService;
-import com.yq.service.GoodsService;
-import com.yq.service.UserService;
 import com.yq.util.StringUtil;
 import com.yq.util.PageUtil;
 import com.yq.entity.Address;
@@ -198,7 +196,30 @@ public class GoodsCtrl extends StringUtil {
 		ml.setViewName("page/goods-order");
 		return ml;
 	}
-	
+
+
+
+	/**
+	 * 接收二维码
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value="/twoCode.html")
+	@ResponseBody
+	public Object twoCode(HttpServletRequest request) throws IOException {
+		System.out.println("-----------------------------------");
+		JSONObject data = new JSONObject();
+		String accessToken = TwoCode.getToken();
+		System.out.println("accessToken;" + accessToken);
+		String twoCodeUrl = TwoCode.getminiqrQr(accessToken, request);
+		System.out.println("twoCodeUrl:"+twoCodeUrl);
+		data.put("twoCodeUrl", twoCodeUrl);
+		return data;
+	}
+
+
+
 	@RequestMapping(value = "/page/secGoodsList.html")
 	public ModelAndView secGoodsList(String goods_name,
 			@RequestParam(defaultValue = "0") Integer is_recommend,
@@ -206,10 +227,10 @@ public class GoodsCtrl extends StringUtil {
 			@RequestParam(defaultValue = "0") Integer ctg_id,
 			@RequestParam(defaultValue = "1") Integer currentPage,
 			HttpServletRequest request) {
-		try {
+//		try {
 			if (StringUtils.isNotEmpty(goods_name)) {
-				goods_name = new String(goods_name.getBytes("iso8859-1"),
-						"utf-8");
+//				goods_name = new String(goods_name.getBytes("iso-8859-1"),
+//						"utf-8");
 			}
 			goods.setType(1);
 			goods.setStatus(status);
@@ -221,11 +242,11 @@ public class GoodsCtrl extends StringUtil {
 			ml.addObject("goods", list);
 			ml.setViewName("page/goods-list");
 			return ml;
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return null;
+//		}
 	}
 	
 
