@@ -103,7 +103,12 @@
                 	<%-- <p class="ssjg-p2" style="font-size: 9px;"><span>${goodsList.goods_spe}</span></p> --%>
                     <p class="ssjg-p1" style="margin-top:10px;"><span>￥${goodsList.goods_price}</span></p>
                     </dt>
-                    <dd><a href="javascript:;" onclick="add('${goodsList.goods_id}','${goodsList.goods_name}','${goodsList.goods_img}','${goodsList.goods_spe}','${goodsList.goods_price}')"><img src="images/sjsc-09.gif" style="width: 25px;height: 25px"></a></dd>
+                    <dd>
+                        <c:if test="${goodsList.is_coupon !='1'}">
+                        <%--<c:if test="${goodsList.is_recommend !='1'}">--%>
+                        <a href="javascript:;" onclick="add('${goodsList.goods_id}','${goodsList.goods_name}','${goodsList.goods_img}','${goodsList.goods_spe}','${goodsList.goods_price}')"><img src="images/sjsc-09.gif" style="width: 25px;height: 25px"></a>
+                        </c:if>
+                    </dd>
                     <div style="clear:both;"></div>
                 </dl>
             </li>
@@ -133,7 +138,11 @@
                 	<%-- <p class="ssjg-p2" style="font-size: 9px"><span>${glist.goods_spe}</span></p> --%>
                     <p class="ssjg-p1" style="margin-top:10px"><span>￥${glist.goods_price}</span></p>
                     </dt>
-                    <dd><a href="javascript:;" onclick="add('${glist.goods_id}','${glist.goods_name}','${glist.goods_img}','${glist.goods_spe}','${glist.goods_price}')"><img src="images/sjsc-09.gif" style="width: 25px;height: 25px"></a></dd>
+                    <dd>
+                        <c:if test="${glist.is_coupon !='1'}">
+                        <a href="javascript:;" onclick="add('${glist.goods_id}','${glist.goods_name}','${glist.goods_img}','${glist.goods_spe}','${glist.goods_price}')"><img src="images/sjsc-09.gif" style="width: 25px;height: 25px"></a>
+                        </c:if>
+                    </dd>
                     <div style="clear:both;"></div>
                 </dl>
             </li>

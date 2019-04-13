@@ -28,6 +28,25 @@ public class Order extends Page{
 	String express_dm ;
 	String express_name ;
 	String express_hm ;
+	String qr_image ;
+	Integer is_coupon ;
+
+    public String getQr_image() {
+        return qr_image;
+    }
+
+    public void setQr_image(String qr_image) {
+        this.qr_image = qr_image;
+    }
+
+    public Integer getIs_coupon() {
+		return is_coupon;
+	}
+
+	public void setIs_coupon(Integer is_coupon) {
+		this.is_coupon = is_coupon;
+	}
+
 	public String getOrder_id() {
 		return order_id;
 	}

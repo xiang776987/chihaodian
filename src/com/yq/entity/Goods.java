@@ -13,6 +13,16 @@ public class Goods extends Page{
 	String goods_spe;
 	Integer type;
 	Integer goods_num;
+	Integer is_coupon;
+
+	public Integer getIs_coupon() {
+		return is_coupon;
+	}
+
+	public void setIs_coupon(Integer is_coupon) {
+		this.is_coupon = is_coupon;
+	}
+
 	public Integer getGoods_id() {
 		return goods_id;
 	}

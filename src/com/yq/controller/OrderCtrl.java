@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.yq.util.QRCodeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,12 @@ public class OrderCtrl extends StringUtil {
 	public String insert(String goods_id, String goods_name, String goods_img, String goods_spe, String goods_price,
 			String goods_num, Float goods_total, Integer goods_total_num, Integer cps_id, String cps_name,
 			@RequestParam(defaultValue = "0") Float cps_price, String addr_name, String receive, String oppen_id,
-			Integer status, String note, HttpSession session) throws UnsupportedEncodingException {
+			Integer status,Integer Is_coupon, String note, HttpSession session,HttpServletRequest request) throws Exception {
+
+
+
+
+
 		String add_time = sdf.format(new Date());
 		oppen_id = getOppen_id(session);
 		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmssSSS");
@@ -116,6 +122,27 @@ public class OrderCtrl extends StringUtil {
 		if(StringUtils.isNotEmpty(note)){
 			note = java.net.URLDecoder.decode(note,"utf-8") ;
 		}
+
+
+		String realpath = request.getSession().getServletContext().getRealPath("");
+		String path = "";
+		String qrPath = "/upload/orderQr/";
+		if(realpath.contains("\\")){
+			path = realpath.substring(0,realpath.lastIndexOf("\\"));
+		}else{
+			path = realpath.substring(0,realpath.lastIndexOf("/"));
+		}
+
+        String qrName = order_id + ".jpg";
+
+        String text = order_id;
+        QRCodeUtil.encode(text,"", path+qrPath,true,qrName);
+        String qr_image = qrPath + qrName;
+                System.out.println("------------------------------------------");
+		System.out.println(path);
+		System.out.println("------------------------------------------");
+
+
 		order.setOrder_id(order_id);
 		order.setGoods_id(goods_id);
 		order.setGoods_name(goods_name);
@@ -132,6 +159,8 @@ public class OrderCtrl extends StringUtil {
 		order.setReceive(receive);
 		order.setOppen_id(oppen_id);
 		order.setAdd_time(add_time);
+		order.setIs_coupon(Is_coupon);
+		order.setQr_image(qr_image);
 		order.setStatus(0);
 		order.setNote(note);
 		if (orderService.insert(order) == 1) {
@@ -441,6 +470,7 @@ public class OrderCtrl extends StringUtil {
 			HttpSession session) {
 		order.setOrder_id(order_id);
 		List<Order> list = orderService.listById(order);
+
 		map.put("list", list);
 		ModelAndView ml = new ModelAndView();
 		if (list.size() > 0) {
@@ -552,15 +582,9 @@ public class OrderCtrl extends StringUtil {
 //		if(tprice<0){
 //			tprice = 0F;
 //		}
-		List<Freight> fgt = freightService.list(freight);
-		if (fgt.size() > 0) {
-			if (tprice < fgt.get(0).getFree_price()) {
-				tprice = tprice + fgt.get(0).getFgt_price(); // 如果总价小于免邮价，则加上运费
-				ml.addObject("fgt_price", fgt.get(0).getFgt_price());
-			} else {
-				ml.addObject("fgt_price", 0);// 免运费
-			}
-		}
+		tprice = getaFloat(ml, tprice);
+
+
 		String add_time = sf.format(new Date());
 
 		coupons.setOppen_id(oppen_id);
@@ -600,11 +624,19 @@ public class OrderCtrl extends StringUtil {
 	public ModelAndView goodsOrder(Integer goods_id, Integer goods_num,
 			@RequestParam(defaultValue = "0") Integer cps_id, @RequestParam(defaultValue = "0") Integer addr_id,
 			String cps_name, @RequestParam(defaultValue = "0") Float cps_price, String oppen_id, HttpSession session) {
+        System.out.println(oppen_id);
 		ModelAndView ml = new ModelAndView();
 		oppen_id = getOppen_id(session);
 		cart.setOppen_id(oppen_id);
 		goods.setGoods_id(goods_id);
 		List<Goods> list = goodsService.listById(goods); // 获取订单信息
+
+        //如果直接下订单 并且是优惠卷（优惠卷一次只能买一个） 免运费  Is_coupon 是否是优惠卷
+        String Is_coupon = "0";
+        if (list.size()==1)
+            Is_coupon = String.valueOf(list.get(0).getIs_coupon());
+
+
 		Float goods_total = goods_num * list.get(0).getGoods_price();// 总价
 		Float tprice = goods_num * list.get(0).getGoods_price();// 总价
 		ml.addObject("price", tprice); //
@@ -632,15 +664,16 @@ public class OrderCtrl extends StringUtil {
 			addr = addressService.listById(address);
 		}
 		tprice = (tprice*100 - cps_price*100)/100; // 使用优惠券的总价
-		List<Freight> fgt = freightService.list(freight);
-		if (fgt.size() > 0) {
-			if (tprice < fgt.get(0).getFree_price()) {
-				tprice = tprice + fgt.get(0).getFgt_price(); // 如果总价小于免邮价，则加上运费
-				ml.addObject("fgt_price", fgt.get(0).getFgt_price());
-			} else {
+
+
+
+
+		if ("1".equals(Is_coupon)){
 				ml.addObject("fgt_price", 0);// 免运费
-			}
+		}else {
+			tprice = getaFloat(ml, tprice);
 		}
+
 		String add_time = sf.format(new Date());
 		coupons.setOppen_id(oppen_id);
 		coupons.setCps_level(-1);
@@ -662,6 +695,7 @@ public class OrderCtrl extends StringUtil {
 		ml.addObject("goods_id", goods_id);
 		ml.addObject("goods_num", goods_num);
 		ml.addObject("goods_total", goods_total);
+		ml.addObject("Is_coupon", Is_coupon);
 
 		ml.addObject("tnum", tnum);
 		ml.addObject("cpsCount", cps.size());
@@ -670,6 +704,20 @@ public class OrderCtrl extends StringUtil {
 		ml.setViewName("page/goods-order-sure");
 		return ml;
 	}
+
+	private Float getaFloat(ModelAndView ml, Float tprice) {
+		List<Freight> fgt = freightService.list(freight);
+		if (fgt.size() > 0) {
+			if (tprice < fgt.get(0).getFree_price()) {
+				tprice = tprice + fgt.get(0).getFgt_price(); // 如果总价小于免邮价，则加上运费
+				ml.addObject("fgt_price", fgt.get(0).getFgt_price());
+			} else {
+				ml.addObject("fgt_price", 0);// 免运费
+			}
+		}
+		return tprice;
+	}
+
 	@RequestMapping(value = "/page/order.html")
 	public ModelAndView goodsOrder(String order_id){
 		ModelAndView ml = new ModelAndView();

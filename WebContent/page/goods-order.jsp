@@ -34,9 +34,13 @@
                 <p class="gwc-p1">商城价：<span>￥${list.goods_price}</span></p>
             </div>
             <c:if test="${list.goods_price!=0}">
-            <a href="javascript:;" onclick="plus('${list.goods_id}','${list.goods_price}','${s.count}')" class="gwc-del f-r"><img src="images/11.png" style="width: 28px;height: 25px"></a>
-            <a href="#" class="gwc-del f-r" id="goods_num" style="padding-top:4px;width: 16px">${list.goods_num}</a>
-            <a href="javascript:;" onclick="min('${list.goods_id}','${list.goods_price}','${s.count}')" class="gwc-del f-r"><img src="images/22.png" style="width: 28px;height: 25px"></a>
+            <c:if test="${list.is_coupon !=1}">
+                <a href="javascript:;" onclick="plus('${list.goods_id}','${list.goods_price}','${s.count}')" class="gwc-del f-r"><img src="images/11.png" style="width: 28px;height: 25px"></a>
+            </c:if>
+                <a href="#" class="gwc-del f-r" id="goods_num" style="padding-top:4px;width: 16px">${list.goods_num}</a>
+            <c:if test="${list.is_coupon !=1}">
+                <a href="javascript:;" onclick="min('${list.goods_id}','${list.goods_price}','${s.count}')" class="gwc-del f-r"><img src="images/22.png" style="width: 28px;height: 25px"></a>
+            </c:if>
             </c:if>
             <c:if test="${list.goods_price==0}">
             <a href="javascript:;" onclick="del('${list.goods_id}')" class="gwc-del f-r"><img src="images/sjsc-10.gif"></a>

@@ -101,9 +101,9 @@ public class BufferedImageLuminanceSource extends LuminanceSource {
 
     public static void main(String[] args) throws Exception {
         String text = "sdfsfffffffffsfdsfdsfdsdfs";
-        String sss = QRCodeUtil.encode(text,"", "d:/test/",true);
+        QRCodeUtil.encode(text,"", "d:/test2/",true);
 
-        System.out.println(sss);
+
     }
 
 

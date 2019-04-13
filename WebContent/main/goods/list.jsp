@@ -73,6 +73,7 @@
 						<th width="30%">缩略图</th>
 						<th width="15%">价格</th>
 						<th width="15%">发布日期</th>
+						<th width="5%">是否优惠卷</th>
 						<th width="15%">操作</th>
 					</tr>
 				</thead>
@@ -85,7 +86,14 @@
 							<td><img alt="" src="${list.goods_img}" width="50" height="50"> </td>
 							<td>${list.goods_price}</td>
 							<td>${list.add_time}</td>
-							
+							<td>
+								<c:if test="${list.is_coupon ==1}">
+								是
+								</c:if>
+								<c:if test="${list.is_coupon ==0}">
+									否
+								</c:if>
+							</td>
 							<td>
 							<a href="goodsListById.html?goods_id=${list.goods_id}">编辑</a>&nbsp;&nbsp;
 							<c:if test="${list.is_recommend!=1}">

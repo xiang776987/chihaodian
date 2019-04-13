@@ -29,7 +29,9 @@ $(function(){
         <a href="javascript:window.location.href='orderList.html'" class="sjsc-t2r"><img src="images/back.png" alt="" style="width:20px;height: 20px;padding-top: 11px;padding-left: 5px"/></a>
     </div>
      <input type="hidden" value="${addr_id}" id='addr_id'>
-      
+     <input type="hidden" value="${Is_coupon}" id='Is_coupon'>
+<c:if test="${Is_coupon!='1'}">
+
     <dl class="drdd-info6" onclick="window.location.href='addrListTwo.html?cps_id=${cps_id}&addr_id=${addr_id}&goods_id=${goods_id }&goods_num=${goods_num}'">
      <c:forEach items="${addr}" var="addr" begin="0" end="0">
      <input type="hidden" value="${addr.addr_user }" id='addr_user'>
@@ -61,7 +63,7 @@ $(function(){
         <dd><a>></a></dd>
         <div style="clear:both;"></div>
     </dl>
-    
+</c:if>
     <input type="hidden" value="${goods_num}" id='tnum'>
     <input type="hidden" value="${tprice}" id='tprice'>
        <div style="font-size: 12px;padding-left:5px; margin-top:13px;color: #A09E9E">
@@ -228,6 +230,8 @@ $(function(){
     	var goods_price="";
     	var goods_num="";
     	var fgt_price= $('#fgt_price').val();
+    	var Is_coupon= $('#Is_coupon').val();
+
     	var goods_ids=$("input[name='goods_id']");
     	for (var i = 0; i < goods_ids.length; i++) {
 			if (i == 0) {
@@ -294,38 +298,43 @@ $(function(){
     		addr_name='';
     	}
     	
-    	
-    	if(fgt_price!=-1){
-    		var area_area = $('#area_area').val();
-    		var area_addr = $('#area_addr').val();
-    		if(area_area==-2){
-    			showTip('请选择区域');
-        		return ;
-    		}
-			if(area_addr==-2){
-				showTip('请选择自提点');
-	    		return ;
-    		}
-    		receive=$('#area_area').find("option:selected").text()+area_addr;
-    		
-    	}
-		
-    	if(addr_user==''||addr_tel==''||addr_name==''){
-    		showTip('请填写有效的收货地址');
-    		return ;
-    	}
-     	var province =$('#province').text();
-		if(province==''){
-			showTip("收货地址填写有误，请重新编辑！");return;
-		}
-		var city =$('#city').text();
-		if(city==''){
-			showTip("收货地址填写有误，请重新编辑！");return;
-		}
-		var area =$('#area').text();
-		if(area==''){
-			showTip("收货地址填写有误，请重新编辑！");return;
-		}
+
+        if (Is_coupon!=1) {
+            if (fgt_price != -1) {
+                var area_area = $('#area_area').val();
+                var area_addr = $('#area_addr').val();
+                if (area_area == -2) {
+                    showTip('请选择区域');
+                    return;
+                }
+                if (area_addr == -2) {
+                    showTip('请选择自提点');
+                    return;
+                }
+                receive = $('#area_area').find("option:selected").text() + area_addr;
+
+            }
+
+            if (addr_user == '' || addr_tel == '' || addr_name == '') {
+                showTip('请填写有效的收货地址');
+                return;
+            }
+            var province = $('#province').text();
+            if (province == '') {
+                showTip("收货地址填写有误，请重新编辑！");
+                return;
+            }
+            var city = $('#city').text();
+            if (city == '') {
+                showTip("收货地址填写有误，请重新编辑！");
+                return;
+            }
+            var area = $('#area').text();
+            if (area == '') {
+                showTip("收货地址填写有误，请重新编辑！");
+                return;
+            }
+        }
 		var note= $('#note').val();
 		
     	var addr_name=addr_user+' '+addr_tel+' '+province+' '+city+' '+ area+' '+addr_name;
@@ -343,8 +352,10 @@ $(function(){
 			+'&cps_name='+cps_name
 			+'&cps_price='+cps_price
 			+'&addr_name='+addr_name
+			+'&Is_coupon='+Is_coupon
 			+'&receive='+receive+'&note='+note,
 			success:function(rs){
+
 				var re = /^[0-9]+.?[0-9]*$/;    
 				if(re.test(rs)&&rs!=0){
 					

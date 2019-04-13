@@ -93,7 +93,7 @@ public class GoodsCtrl extends StringUtil {
 	@RequestMapping(value = "/main/goodsUpdate.html")
 	public Object update(String goods_name, String goods_img,String goods_spe,
 			Float goods_price, String goods_detail, String add_time,
-			Integer ctg_id, Integer goods_id) throws UnsupportedEncodingException {
+			Integer ctg_id, Integer goods_id,Integer is_coupon) throws UnsupportedEncodingException {
 		goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
 		map.put("goods_name", goods_name);
 		map.put("goods_img", goods_img);		
@@ -103,6 +103,7 @@ public class GoodsCtrl extends StringUtil {
 		map.put("add_time", add_time);
 		map.put("ctg_id", ctg_id);
 		map.put("goods_id", goods_id);
+		map.put("is_coupon", is_coupon);
 		map.put("type", 1);
 		return goodsService.update(map) + "";
 

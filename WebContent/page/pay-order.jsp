@@ -79,7 +79,7 @@
         <button class="drdd-btn" onclick="window.location.href='orderUpdate.html?order_id=${list.order_id}'">确认下单</button>
         </c:if>
          <c:if test="${list.goods_total>0}">
-        <button class="drdd-btn" onclick="callpay()">微信支付package:"<%=request.getAttribute("package")%>"paySign"<%=request.getAttribute("paySign")%></button>
+        <button class="drdd-btn" onclick="callpay()">微信支付</button>
         </c:if>
         
         </c:forEach>
