@@ -18,16 +18,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sun.jndi.url.dns.dnsURLContext;
 import com.weixin.pay.action.NotifyServlet;
 import com.weixin.pay.action.TopayServlet;
 import com.weixin.pay.util.GetWxOrderno;
@@ -101,9 +97,9 @@ public class OrderCtrl extends StringUtil {
 
 		String add_time = sdf.format(new Date());
 		oppen_id = getOppen_id(session);
-		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+
 		Order order = new Order();
-		String order_id = sd.format(new Date());
+		String order_id = getId();
 		if(StringUtils.isNotEmpty(goods_name)){
 			goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
 		}
@@ -126,21 +122,19 @@ public class OrderCtrl extends StringUtil {
 
 		String realpath = request.getSession().getServletContext().getRealPath("");
 		String path = "";
-		String qrPath = "/upload/orderQr/";
 		if(realpath.contains("\\")){
 			path = realpath.substring(0,realpath.lastIndexOf("\\"));
 		}else{
 			path = realpath.substring(0,realpath.lastIndexOf("/"));
 		}
 
-        String qrName = order_id + ".jpg";
+		String qrPath = "/upload/orderQr/";
+		String qrName = order_id + ".jpg";
+		String text = order_id;
 
-        String text = order_id;
         QRCodeUtil.encode(text,"", path+qrPath,true,qrName);
         String qr_image = qrPath + qrName;
-                System.out.println("------------------------------------------");
-		System.out.println(path);
-		System.out.println("------------------------------------------");
+
 
 
 		order.setOrder_id(order_id);
@@ -185,6 +179,25 @@ public class OrderCtrl extends StringUtil {
 			return "0";
 		}
 
+	}
+
+	public static String getId() {
+		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String order_id = sd.format(new Date());
+		int x = (int) (Math.random() * 1000);
+		if (x<10){
+			order_id+=order_id+"000"+x;
+			return order_id;
+		}
+		if (x<100){
+			order_id+=order_id+"00"+x;
+			return order_id;
+		}
+		if (x<1000){
+			order_id+=order_id+"0"+x;
+			return order_id;
+		}
+		return order_id;
 	}
 
 	@ResponseBody

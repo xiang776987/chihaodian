@@ -12,9 +12,42 @@
 <link rel="stylesheet" type="text/css" href="css/shoujisc.css">
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/woxiangyao.js"></script>
+
+    <style>
+        #main {
+            margin-top: 50px;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+
+        #qrcode img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            display: block;
+        }
+
+        #qrcode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            z-index: 9999;
+            display: none;
+        }
+    </style>
+
+
 </head>
 
 <body>
+<div id="qrcode">
+    <img id="image" width="100%" height="100%" src="">
+</div>
 
     <div class="sjsc-title2">
     	<h3 class="sjsc-t2l">我的订单</h3>
@@ -47,6 +80,7 @@
                 <c:forEach items="${map[ord]}" var="ordList">
                 <dl class="my-dl1">
                 	<dt><a href="#"><img src="${ordList.goods_img}" style="width: 68px"></a></dt>
+                    <%--<dt><a href="#"><img src="${list.qr_image}" style="width: 68px"></a></dt>--%>
                     <dd>
                     	<h3><a href="#">${ordList.goods_name}</a></h3>
                     	
@@ -73,8 +107,12 @@
                 	<button class="my-btn1 f-r" >￥${list.goods_total}</button>
                 	
                 	<c:if test="${list.status==1}">
-               		 <button class="my-btn1 f-r" onclick="send('${list.order_id}')">退款</button>
+               		    <button class="my-btn1 f-r" onclick="send('${list.order_id}')">退款</button>
+                        <c:if test="${list.is_coupon==1}">
+                            <button class="my-btn1 f-r" onclick="qrToggle('${list.qr_image}')">查看二维码</button>
+                        </c:if>
                 	</c:if>
+
                 	</c:if>
                     <div style="clear:both;"></div>
                 </div>
@@ -225,6 +263,15 @@
     				}
     			})
     		}
+    		function qrToggle( qrImage){
+                // qrImage = "/chihaodian"+qrImage;
+                    $("#image").attr('src',qrImage);
+                    $("#qrcode").fadeIn("slow");
+    		}
+
+            $("#qrcode").click(function() {
+                $("#qrcode").fadeOut("slow");
+            })
     		</script>
 </body>
 </html>

@@ -88,6 +88,17 @@
 						</select>
 						</div>
 			</div><br>
+		<div class="row cl">
+			<label class="form-label col-2">是否优惠卷：</label>
+			<div class="formControls col-10">
+				<select id="is_coupon" class="input-text" style="width: 80%">
+					<c:if test="${list.is_coupon==1}"><option value="1">是</option></c:if>
+					<c:if test="${list.is_coupon==0}"><option value="0">否</option></c:if>
+					<option value="1">是</option>
+					<option value="0">否</option>
+				</select>
+			</div>
+		</div><br>
 			<div class="row cl">
 						<label class="form-label col-2">图片：</label>
 						<div class="formControls col-10">
@@ -146,12 +157,13 @@
 		var goods_img = $('#filepath').val();
 		var goods_price = $('#goods_price').val();
 		var goods_detail = $('#goods_detail').val();
-		
+		var is_coupon = $('#is_coupon').val();
+
 		$.ajax({
 			url:'goodsInsert.html',
 			type:'post',
 			data:'goods_name='+encodeURI(goods_name)+'&ctg_id='+ctg_id+'&goods_img='+goods_img+'&goods_spe='+goods_spe
-			+'&goods_price='+goods_price+'&goods_detail='+goods_detail,
+			+'&goods_price='+goods_price+'&goods_detail='+goods_detail+'&is_coupon='+is_coupon,
 			success:function(rs){
 				if(rs==1){
 					

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.yq.service.*;
+import com.yq.util.QRCodeUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ import com.yq.entity.Coupons;
 import com.yq.entity.Freight;
 import com.yq.entity.Goods;
 import com.yq.entity.User;
+
+import static com.yq.controller.OrderCtrl.getId;
 
 @Controller
 @RequestMapping("/")
@@ -71,12 +74,27 @@ public class GoodsCtrl extends StringUtil {
 	@RequestMapping(value = "/main/goodsInsert.html")
 	public String insert(String goods_name, String goods_img,String goods_spe,
 			Float goods_price, String goods_detail, Integer ctg_id,
-			Integer status,Integer type) throws UnsupportedEncodingException {
+			Integer status,Integer type,Integer is_coupon,HttpServletRequest request) throws Exception {
 		String add_time =sf.format(new Date());
 //		try {
 //		goods_name = new String(goods_name.getBytes("iso8859-1"),"utf-8");
+String goods_id = getId();
+		String realpath = request.getSession().getServletContext().getRealPath("");
+		String path = "";
+		if(realpath.contains("\\")){
+			path = realpath.substring(0,realpath.lastIndexOf("\\"));
+		}else{
+			path = realpath.substring(0,realpath.lastIndexOf("/"));
+		}
 
+		String goodQrPath = "/upload/goodQr/";
+		String googQrName = goods_id + ".jpg";
+		String text = goods_id;
+
+		QRCodeUtil.encode(text,"", path+goodQrPath,true,googQrName);
+		String good_qr_image = goodQrPath + googQrName;
 		goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
+		map.put("goods_id", goods_id);
 		map.put("goods_name", goods_name);
 		map.put("goods_img", goods_img);
 		map.put("goods_spe", goods_spe);
@@ -84,6 +102,8 @@ public class GoodsCtrl extends StringUtil {
 		map.put("goods_detail", goods_detail);
 		map.put("add_time", add_time);
 		map.put("ctg_id", ctg_id);
+		map.put("is_coupon", is_coupon);
+		map.put("good_qr_image", good_qr_image);
 		map.put("status", 1);
 		map.put("type", 1);
 		return goodsService.insert(map) + "";
