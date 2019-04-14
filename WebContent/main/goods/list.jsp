@@ -23,11 +23,15 @@
 	type="text/css" />
 <!--[if IE 6]>
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <title>意见反馈</title>
 </head>
 <body>
+<div id="qrcode">
+	<img id="image" width="100%" height="100%" src="">
+</div>
 	<nav class="breadcrumb">
 		<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>
 		查看 <a class="btn btn-success radius r mr-20"
@@ -83,7 +87,8 @@
 							<td><input type="checkbox" value="1" name=""></td>
 							<td>${s.count}</td>
 							<td>${list.goods_name}</td>
-							<td><img alt="" src="${list.goods_img}" width="50" height="50"> </td>
+							<td><img alt="" src="${list.goods_img}" width="50" height="50">
+								<img alt="" src="${list.good_qr_image}" width="50" height="50"> </td>
 							<td>${list.goods_price}</td>
 							<td>${list.add_time}</td>
 							<td>
@@ -96,6 +101,7 @@
 							</td>
 							<td>
 							<a href="goodsListById.html?goods_id=${list.goods_id}">编辑</a>&nbsp;&nbsp;
+							<a href="javascript:;" onclick="qrToggle('${list.goods_id}','1')">查看二维码</a>&nbsp;&nbsp;
 							<c:if test="${list.is_recommend!=1}">
 							<a href="javascript:;" onclick="is_recommend('${list.goods_id}','1')">首页推荐</a></c:if>
 							<c:if test="${list.is_recommend==1}">
