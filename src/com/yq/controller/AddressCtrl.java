@@ -97,7 +97,7 @@ public class AddressCtrl extends StringUtil{
 	}
 	
 	@RequestMapping(value = "/page/addrListTwo.html")
-	public ModelAndView listTwo(Integer goods_id,Integer goods_num,Integer addr_id,Integer cps_id,String oppen_id,HttpSession session) {
+	public ModelAndView listTwo(Long goods_id,Integer goods_num,Integer addr_id,Integer cps_id,String oppen_id,HttpSession session) {
 		address.setOppen_id(getOppen_id(session));
 		List<Address> list = addressService.list(address);
 		ModelAndView ml = new ModelAndView();

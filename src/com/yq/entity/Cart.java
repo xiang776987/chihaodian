@@ -2,7 +2,7 @@ package com.yq.entity;
 
 public class Cart {
 	Integer cart_id;
-	Integer goods_id;
+	Long goods_id;
 	String goods_name;
 	String goods_img;
 	Float goods_price;
@@ -52,12 +52,15 @@ public class Cart {
 	public void setOppen_id(String oppen_id) {
 		this.oppen_id = oppen_id;
 	}
-	public Integer getGoods_id() {
+
+	public Long getGoods_id() {
 		return goods_id;
 	}
-	public void setGoods_id(Integer goods_id) {
+
+	public void setGoods_id(Long goods_id) {
 		this.goods_id = goods_id;
 	}
+
 	public String getGoods_spe() {
 		return goods_spe;
 	}

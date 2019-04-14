@@ -19,5 +19,7 @@ public interface GoodsDao {
 	
 	public int count(Goods goods); 
 	
-	public List<Goods> listById(Goods goods); 
+	public List<Goods> listById(Goods goods);
+
+    public int hxWxUser(Map<String, Object> map);
 }

@@ -2,8 +2,8 @@ package com.yq.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +12,18 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.weixin.entity.WxSetting;
+import com.weixin.service.WxSettingService;
+import com.weixin.util.WxUtil;
 import com.yq.service.*;
 import com.yq.util.QRCodeUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,7 +31,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yq.util.StringUtil;
 import com.yq.util.PageUtil;
 import com.yq.entity.Address;
-import com.yq.entity.Cart;
 import com.yq.entity.Category;
 import com.yq.entity.Coupons;
 import com.yq.entity.Freight;
@@ -75,24 +78,16 @@ public class GoodsCtrl extends StringUtil {
 	public String insert(String goods_name, String goods_img,String goods_spe,
 			Float goods_price, String goods_detail, Integer ctg_id,
 			Integer status,Integer type,Integer is_coupon,HttpServletRequest request) throws Exception {
+
+
+		AbstractApplicationContext ctx   = new ClassPathXmlApplicationContext(new String []{"classpath:applicationContext.xml"});
+		WxSettingService wxSettingService =(WxSettingService)ctx.getBean("wxSettingService") ;
+		WxSetting wxSetting  =  wxSettingService.selectByPrimaryKey(1);
 		String add_time =sf.format(new Date());
 //		try {
 //		goods_name = new String(goods_name.getBytes("iso8859-1"),"utf-8");
-String goods_id = getId();
-		String realpath = request.getSession().getServletContext().getRealPath("");
-		String path = "";
-		if(realpath.contains("\\")){
-			path = realpath.substring(0,realpath.lastIndexOf("\\"));
-		}else{
-			path = realpath.substring(0,realpath.lastIndexOf("/"));
-		}
-
-		String goodQrPath = "/upload/goodQr/";
-		String googQrName = goods_id + ".jpg";
-		String text = goods_id;
-
-		QRCodeUtil.encode(text,"", path+goodQrPath,true,googQrName);
-		String good_qr_image = goodQrPath + googQrName;
+		String goods_id = getId();
+		String good_qr_image = createGoodsQr(request, wxSetting, goods_id);
 		goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
 		map.put("goods_id", goods_id);
 		map.put("goods_name", goods_name);
@@ -109,11 +104,30 @@ String goods_id = getId();
 		return goodsService.insert(map) + "";
 	}
 
+	private String createGoodsQr(HttpServletRequest request, WxSetting wxSetting, String goods_id) throws Exception {
+		String realpath = request.getSession().getServletContext().getRealPath("");
+		String path = "";
+		if(realpath.contains("\\")){
+			path = realpath.substring(0,realpath.lastIndexOf("\\"));
+		}else{
+			path = realpath.substring(0,realpath.lastIndexOf("/"));
+		}
+
+		String goodQrPath = "/upload/goodQr/";
+		String googQrName = goods_id + ".jpg";
+		String redirect_uri = wxSetting.getLink()+"/main/goodHxWxUser.html?goods_id="+ goods_id;
+		String text ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxSetting.getAppid()+"&redirect_uri="+ URLEncoder.encode(redirect_uri)
+				+ "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
+
+		QRCodeUtil.encode(text,"", path+goodQrPath,true,googQrName);
+		return goodQrPath + googQrName;
+	}
+
 	@ResponseBody
 	@RequestMapping(value = "/main/goodsUpdate.html")
 	public Object update(String goods_name, String goods_img,String goods_spe,
 			Float goods_price, String goods_detail, String add_time,
-			Integer ctg_id, Integer goods_id,Integer is_coupon) throws UnsupportedEncodingException {
+			Integer ctg_id, Long goods_id,Integer is_coupon) throws UnsupportedEncodingException {
 		goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
 		map.put("goods_name", goods_name);
 		map.put("goods_img", goods_img);		
@@ -131,7 +145,7 @@ String goods_id = getId();
 
 	@ResponseBody
 	@RequestMapping(value = "/main/goodsUpstatus.html")
-	public Object upstatus(Integer goods_id, Integer status) {
+	public Object upstatus(Long goods_id, Integer status) {
 		map.put("status", status);
 		map.put("goods_id", goods_id);
 		return goodsService.upstatus(map) + "";
@@ -139,13 +153,49 @@ String goods_id = getId();
 
 	@ResponseBody
 	@RequestMapping(value = "/main/goodsUpisrec.html")
-	public Object upisrec(Integer goods_id, Integer is_recommend) {
+	public Object upisrec(Long goods_id, Integer is_recommend) {
 		map.put("is_recommend", is_recommend);
 		map.put("goods_id", goods_id);
 		return goodsService.upisrec(map) + "";
 	}
 
-	@RequestMapping(value = "/main/goodsList.html")
+    /**
+     * 添加商品的核销人微信id和微信名称
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/main/goodHxWxUser.html")
+    public Object hxWxUser(HttpSession session,Long goods_id,HttpServletRequest request) {
+
+		try {
+			String oppen_id = "";
+			String hx_username = "";
+			if (StringUtil.isTest){
+                oppen_id = getOppen_id(session);
+                hx_username ="wum";
+            }else {
+                System.out.println("==============================进入goodHxWxUser");
+                map = WxUtil.oppenIdInfo(request, session);
+                oppen_id = (String) map.get("oppen_id");
+                hx_username = (String) map.get("realname");
+                System.out.println("==========================oppen_id:"+oppen_id);
+            }
+			User wxUser = new User();
+			wxUser.setOppen_id(oppen_id);
+			Map<String,Object> map = new HashMap();
+			map.put("hx_oppen_id",oppen_id);
+			map.put("hx_username",hx_username);
+			map.put("goods_id",goods_id);
+			int i =  goodsService.hxWxUser(map);
+		} catch (Exception e) {
+			return "添加失败";
+		}
+		return  "添加成功";
+    }
+
+
+    @RequestMapping(value = "/main/goodsList.html")
 	public ModelAndView list(Integer status,@RequestParam(defaultValue = "") String goods_name,
 			@RequestParam(defaultValue = "0") Integer ctg_id,
 			@RequestParam(defaultValue = "1") Integer currentPage,
@@ -170,7 +220,7 @@ String goods_id = getId();
 	}
 
 	@RequestMapping(value = "/main/goodsListById.html")
-	public ModelAndView listById(Integer goods_id) {
+	public ModelAndView listById(Long goods_id) {
 		// addjsp();
 		goods.setGoods_id(goods_id);
 		List<Goods> list = goodsService.listById(goods);
@@ -190,7 +240,7 @@ String goods_id = getId();
 	 * @return
 	 */
 	@RequestMapping(value = "/page/goodsListById.html")
-	public ModelAndView goodsListById(Integer goods_id) {
+	public ModelAndView goodsListById(Long goods_id) {
 		goods.setGoods_id(goods_id);
 		List<Goods> list = goodsService.listById(goods);
 		ModelAndView ml = new ModelAndView();
@@ -207,7 +257,7 @@ String goods_id = getId();
 	 * @return
 	 */
 	@RequestMapping(value = "/page/goodsOrder.html")
-	public ModelAndView goodsOrder(Integer goods_id) {
+	public ModelAndView goodsOrder(Long goods_id) {
 		goods.setGoods_id(goods_id);
 		List<Goods> list = goodsService.listById(goods);
 		list.get(0).setGoods_num(1);

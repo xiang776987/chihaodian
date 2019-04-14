@@ -182,7 +182,7 @@ public class CouponsCtrl extends StringUtil {
 		return ml;
 	}
 	@RequestMapping(value = "/page/goodsCoupons.html")
-	public ModelAndView goodsCoupons(Integer goods_id,Integer goods_num,String oppen_id,Integer addr_id ,
+	public ModelAndView goodsCoupons(Long goods_id,Integer goods_num,String oppen_id,Integer addr_id ,
 			@RequestParam(defaultValue = "1") Integer currentPage,
 			HttpServletRequest request,HttpSession session) {
 		String add_time =sf.format(new Date());

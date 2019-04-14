@@ -71,7 +71,7 @@ public class MenuCtrl extends StringUtil {
 
 	@ResponseBody
 	@RequestMapping(value = "/page/menuCartInsert.html")
-	public void insert(Integer goods_id, String goods_name, String goods_img, String goods_spe, Float goods_price,
+	public void insert(Long goods_id, String goods_name, String goods_img, String goods_spe, Float goods_price,
 			Float goods_total, @RequestParam(defaultValue = "1") Integer goods_num, String oppen_id,
 			HttpServletResponse response, HttpSession session) {
 		try {
@@ -129,7 +129,7 @@ public class MenuCtrl extends StringUtil {
 	@ResponseBody
 	@RequestMapping(value = "/main/menuUpdate.html")
 	public Object update(String goods_name, String goods_img, Float goods_price, String goods_spe, String goods_detail,
-			String add_time, Integer ctg_id, Integer goods_id) {
+			String add_time, Integer ctg_id, Long goods_id) {
 		map.put("goods_name", goods_name);
 		map.put("goods_img", goods_img);
 		map.put("goods_spe", goods_spe);
@@ -145,7 +145,7 @@ public class MenuCtrl extends StringUtil {
 
 	@ResponseBody
 	@RequestMapping(value = "/main/menuUpstatus.html")
-	public Object upstatus(Integer goods_id, Integer status) {
+	public Object upstatus(Long goods_id, Integer status) {
 		map.put("status", status);
 		map.put("goods_id", goods_id);
 		return goodsService.upstatus(map) + "";
@@ -168,7 +168,7 @@ public class MenuCtrl extends StringUtil {
 	}
 
 	@RequestMapping(value = "/main/menuListById.html")
-	public ModelAndView listById(Integer goods_id) {
+	public ModelAndView listById(Long goods_id) {
 		// addjsp();
 
 		goods.setGoods_id(goods_id);
@@ -198,7 +198,7 @@ public class MenuCtrl extends StringUtil {
 	 * @return
 	 */
 	@RequestMapping(value = "/page/menuListById.html")
-	public ModelAndView menuListById(Integer goods_id) {
+	public ModelAndView menuListById(Long goods_id) {
 		goods.setGoods_id(goods_id);
 		List<Goods> list = goodsService.listById(goods);
 		ModelAndView ml = new ModelAndView();

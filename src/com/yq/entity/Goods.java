@@ -1,7 +1,7 @@
 package com.yq.entity;
 
 public class Goods extends Page{
-	Integer goods_id;
+	Long goods_id;
 	String goods_name;
 	String goods_img;
 	float goods_price;
@@ -14,8 +14,8 @@ public class Goods extends Page{
 	Integer type;
 	Integer goods_num;
 	Integer is_coupon;
-	String username;
-	String oppen_id;
+	String hx_username;
+	String hx_oppen_id;
 	String good_qr_image;
 
 	public String getGood_qr_image() {
@@ -26,20 +26,20 @@ public class Goods extends Page{
 		this.good_qr_image = good_qr_image;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getHx_username() {
+		return hx_username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setHx_username(String hx_username) {
+		this.hx_username = hx_username;
 	}
 
-	public String getOppen_id() {
-		return oppen_id;
+	public String getHx_oppen_id() {
+		return hx_oppen_id;
 	}
 
-	public void setOppen_id(String oppen_id) {
-		this.oppen_id = oppen_id;
+	public void setHx_oppen_id(String hx_oppen_id) {
+		this.hx_oppen_id = hx_oppen_id;
 	}
 
 	public Integer getIs_coupon() {
@@ -50,11 +50,11 @@ public class Goods extends Page{
 		this.is_coupon = is_coupon;
 	}
 
-	public Integer getGoods_id() {
+	public Long getGoods_id() {
 		return goods_id;
 	}
 
-	public void setGoods_id(Integer goods_id) {
+	public void setGoods_id(Long goods_id) {
 		this.goods_id = goods_id;
 	}
 

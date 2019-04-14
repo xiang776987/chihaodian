@@ -38,7 +38,7 @@ public class CartCtrl extends StringUtil{
 	
 	@ResponseBody
 	@RequestMapping(value = "/page/cartInsert.html")
-	public void insert(Integer goods_id,String goods_name,String goods_img,String goods_spe,Float goods_price,Float goods_total,
+	public void insert(Long goods_id,String goods_name,String goods_img,String goods_spe,Float goods_price,Float goods_total,
 			@RequestParam(defaultValue="1")Integer goods_num,String oppen_id,HttpServletResponse response,HttpSession session) {
 		try {
 			goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
@@ -78,7 +78,7 @@ public class CartCtrl extends StringUtil{
 	}
 	@ResponseBody
 	@RequestMapping(value = "/page/cartUpdate.html")
-	public void update(Float goods_price,Float goods_total,Integer goods_num,Integer goods_id,Integer s,HttpServletResponse response,HttpSession session) {
+	public void update(Float goods_price,Float goods_total,Integer goods_num,Long goods_id,Integer s,HttpServletResponse response,HttpSession session) {
 		try {	
 //		setOppen_id("111", session);//测试代码，模仿登录
 		map.put("oppen_id", getOppen_id(session));
@@ -112,7 +112,7 @@ public class CartCtrl extends StringUtil{
 
 	@ResponseBody
 	@RequestMapping(value = "/page/cartDel.html")
-	public void delete(Integer goods_id,HttpSession session,HttpServletResponse response) {
+	public void delete(Long goods_id,HttpSession session,HttpServletResponse response) {
 		int cart_num =Integer.parseInt(session.getAttribute("cart_num").toString())-1;
 		session.setAttribute("cart_num", cart_num);
 		int rs  = cartService.delete(map);

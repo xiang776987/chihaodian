@@ -1,7 +1,7 @@
 package com.yq.entity;
 
 public class Menu extends Page{
-	Integer goods_id;
+	Long goods_id;
 	String goods_name;
 	String goods_img;
 	float goods_price;
@@ -10,11 +10,11 @@ public class Menu extends Page{
 	Integer status;
 	String goods_spe;
 
-	public Integer getGoods_id() {
+	public Long getGoods_id() {
 		return goods_id;
 	}
 
-	public void setGoods_id(Integer goods_id) {
+	public void setGoods_id(Long goods_id) {
 		this.goods_id = goods_id;
 	}
 

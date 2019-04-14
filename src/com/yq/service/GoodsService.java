@@ -40,4 +40,8 @@ public class GoodsService {
 	public List<Goods> listById(Goods goods){
 		return goodsDao.listById(goods);
 	}
+
+	public int hxWxUser(Map<String, Object> map) {
+		return goodsDao.hxWxUser(map);
+	}
 }

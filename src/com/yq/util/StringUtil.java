@@ -4,12 +4,17 @@ import javax.servlet.http.HttpSession;
 
 public class StringUtil {
 
+	public static boolean isTest = true;
 	protected Integer pagesize_1 = 10;
 
 
 	public String getOppen_id(HttpSession session) {
-//		return (String) session.getAttribute("oppen_id");
-		return "oyqTtw9S7JFtTgx6-3qpSG66w7QU";
+		if (StringUtil.isTest){
+			return "oyqTtw9S7JFtTgx6-3qpSG66w7QU";
+		}else {
+			return (String) session.getAttribute("oppen_id");
+		}
+//
 	}
 	public void setOppen_id(String oppen_id, HttpSession session){
 		

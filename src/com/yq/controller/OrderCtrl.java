@@ -130,7 +130,7 @@ public class OrderCtrl extends StringUtil {
 
 		String qrPath = "/upload/orderQr/";
 		String qrName = order_id + ".jpg";
-		String text = order_id;
+		String text = ""+order_id;
 
         QRCodeUtil.encode(text,"", path+qrPath,true,qrName);
         String qr_image = qrPath + qrName;
@@ -184,19 +184,19 @@ public class OrderCtrl extends StringUtil {
 	public static String getId() {
 		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String order_id = sd.format(new Date());
-		int x = (int) (Math.random() * 1000);
-		if (x<10){
-			order_id+=order_id+"000"+x;
-			return order_id;
-		}
-		if (x<100){
-			order_id+=order_id+"00"+x;
-			return order_id;
-		}
-		if (x<1000){
-			order_id+=order_id+"0"+x;
-			return order_id;
-		}
+//		int x = (int) (Math.random() * 1000);
+//		if (x<10){
+//			order_id=order_id+"000"+x;
+//			return order_id;
+//		}
+//		if (x<100){
+//			order_id=order_id+"00"+x;
+//			return order_id;
+//		}
+//		if (x<1000){
+//			order_id=order_id+"0"+x;
+//			return order_id;
+//		}
 		return order_id;
 	}
 
@@ -634,7 +634,7 @@ public class OrderCtrl extends StringUtil {
 	 * @return
 	 */
 	@RequestMapping(value = "/page/goodsOrderSure.html")
-	public ModelAndView goodsOrder(Integer goods_id, Integer goods_num,
+	public ModelAndView goodsOrder(Long goods_id, Integer goods_num,
 			@RequestParam(defaultValue = "0") Integer cps_id, @RequestParam(defaultValue = "0") Integer addr_id,
 			String cps_name, @RequestParam(defaultValue = "0") Float cps_price, String oppen_id, HttpSession session) {
         System.out.println(oppen_id);
