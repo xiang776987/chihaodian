@@ -2,6 +2,7 @@ package com.yq.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,10 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.weixin.entity.WxSetting;
+import com.weixin.service.WxSettingService;
+import com.weixin.util.WxUtil;
 import com.yq.util.QRCodeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,15 +90,66 @@ public class OrderCtrl extends StringUtil {
 	private Logger log = Logger.getLogger(this.getClass());
 //	WechatPushMassage wechatPushMassage = new WechatPushMassage();
 
+
+	/**
+	 * 添加商品的核销人微信id和微信名称
+	 * @param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/main/orderHx.html")
+	public Object orderHx(HttpSession session,String order_id,HttpServletRequest request) {
+
+		try {
+			String oppen_id = "";
+			String hx_username = "";
+            oppen_id = getOppen_id(session);
+            System.out.println("==============================进入goodHxWxUser");
+            System.out.println("这个是session里面的oppen_id"+getOppen_id(session));
+            if (oppen_id==null||"".equals(oppen_id)){
+                map = WxUtil.oppenIdInfo(request, session);
+                oppen_id = (String) map.get("oppen_id");
+                hx_username = (String) map.get("realname");
+            }else {
+                user.setOppen_id(oppen_id);
+                List<User> userList = userService.listById(user);
+                hx_username = userList.get(0).getUsername();
+            }
+            Order order = new Order();
+            order.setOrder_id(order_id);
+            order =  orderService.listById(order).get(0);
+            String goods_id = order.getGoods_id();
+            Goods findGoods = new Goods();
+            findGoods.setGoods_id(Long.valueOf(goods_id));
+            List<Goods> list = goodsService.listById(findGoods); // 获取订单信息
+            Goods goods = list.get(0);
+            if (oppen_id.equals(goods.getHx_oppen_id())){
+                if(order.getStatus()==1){
+                    Map<String,Object> updateMap = new HashMap<>();
+                    Map<String,Object> map = new HashMap();
+                    map.put("hx_oppen_id",oppen_id);
+                    map.put("hx_username",hx_username);
+                    map.put("order_id",order_id);
+                    int i = orderService.updateHx(map);
+                }else {
+                    return "核销失败，只有未使用的二维码才能核销";
+                }
+            }else {
+                return "你不是该商品的核销人员";
+            }
+		} catch (Exception e) {
+			return "核销失败";
+		}
+		return  "核销成功";
+	}
+
+
 	@ResponseBody
 	@RequestMapping(value = "/page/orderInsert.html")
 	public String insert(String goods_id, String goods_name, String goods_img, String goods_spe, String goods_price,
 			String goods_num, Float goods_total, Integer goods_total_num, Integer cps_id, String cps_name,
 			@RequestParam(defaultValue = "0") Float cps_price, String addr_name, String receive, String oppen_id,
 			Integer status,Integer Is_coupon, String note, HttpSession session,HttpServletRequest request) throws Exception {
-
-
-
 
 
 		String add_time = sdf.format(new Date());
@@ -118,8 +175,13 @@ public class OrderCtrl extends StringUtil {
 		if(StringUtils.isNotEmpty(note)){
 			note = java.net.URLDecoder.decode(note,"utf-8") ;
 		}
+        String qrPath = "/upload/orderQr/";
+        String qrName = order_id + ".jpg";
+        String localRedirect_uri = "/main/orderHx.html?order_id="+ order_id;
 
-
+        AbstractApplicationContext ctx   = new ClassPathXmlApplicationContext(new String []{"classpath:applicationContext.xml"});
+        WxSettingService wxSettingService =(WxSettingService)ctx.getBean("wxSettingService") ;
+        WxSetting wxSetting  =  wxSettingService.selectByPrimaryKey(1);
 		String realpath = request.getSession().getServletContext().getRealPath("");
 		String path = "";
 		if(realpath.contains("\\")){
@@ -127,12 +189,11 @@ public class OrderCtrl extends StringUtil {
 		}else{
 			path = realpath.substring(0,realpath.lastIndexOf("/"));
 		}
-
-		String qrPath = "/upload/orderQr/";
-		String qrName = order_id + ".jpg";
-		String text = ""+order_id;
-
-        QRCodeUtil.encode(text,"", path+qrPath,true,qrName);
+        path = path+qrPath;
+        String redirect_uri = wxSetting.getLink()+localRedirect_uri;
+        String text ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxSetting.getAppid()+"&redirect_uri="+ URLEncoder.encode(redirect_uri)
+                + "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
+        QRCodeUtil.encode(text,"", path,true,qrName);
         String qr_image = qrPath + qrName;
 
 

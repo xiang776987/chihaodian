@@ -78,6 +78,7 @@
 						<th width="15%">价格</th>
 						<th width="15%">发布日期</th>
 						<th width="5%">是否优惠卷</th>
+						<th width="5%">核销人</th>
 						<th width="15%">操作</th>
 					</tr>
 				</thead>
@@ -99,9 +100,9 @@
 									否
 								</c:if>
 							</td>
+							<td>${list.hx_username}</td>
 							<td>
 							<a href="goodsListById.html?goods_id=${list.goods_id}">编辑</a>&nbsp;&nbsp;
-							<a href="javascript:;" onclick="qrToggle('${list.goods_id}','1')">查看二维码</a>&nbsp;&nbsp;
 							<c:if test="${list.is_recommend!=1}">
 							<a href="javascript:;" onclick="is_recommend('${list.goods_id}','1')">首页推荐</a></c:if>
 							<c:if test="${list.is_recommend==1}">

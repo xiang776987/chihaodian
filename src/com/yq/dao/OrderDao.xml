@@ -14,10 +14,15 @@
 		)
 	</insert>
 
+	<update id="updateHx" parameterType="java.util.Map">
+		update tb_order set
+		status=2 ,hx_oppen_id = #{hx_oppen_id},hx_username = #{hx_username}
+		where order_id=#{order_id}
+	</update>
 	<update id="upstatus" parameterType="java.util.Map">
 		update tb_order set
-		
-		status=#{status} 
+
+		status=#{status}
 		<if test="express_dm !=null"> ,express_dm=#{express_dm}</if>
 
 		<if test="express_dm !=null"> ,express_name=#{express_name}</if>

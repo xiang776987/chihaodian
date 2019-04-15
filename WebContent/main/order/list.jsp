@@ -113,6 +113,7 @@
 						<th width="10%">备注</th>
 						<th width="5%">状态</th>
 						<th width="8%">订单日期</th>
+						<th width="8%">核销人</th>
 						<th width="6%">操作</th>
 					</tr>
 				</thead>
@@ -128,7 +129,7 @@
 							</td>
 							<td class="text-c">
 							<c:if test="${list.cps_id ne null}">
-							${list.cps_name}|${list.cps_price}</c:if></td>
+							${list.cps_name}</c:if></td>
 							<td class="text-c"<%--  id="tprice${s.index}" --%>>
 							<input type="text"  <c:if test="${list.status==0 }">onblur="tp('${list.order_id}','total${s.index}')" </c:if><c:if test="${list.status!=0 }"> readonly="readonly" </c:if> id="total${s.index}" class="input-text" value="${list.goods_total}" style="border: 0px solid #fff">
 							
@@ -146,6 +147,7 @@
 							
 							</td>
 							<td class="text-c">${list.add_time}</td>
+							<td class="text-c">${list.hx_username}</td>
 							<%-- <td class="text-c">
 							<c:if test="${list.status==1 }"><a href="javascript:;" onclick="send('${list.order_id}')">发货</a><br></c:if>
 							<c:if test="${list.status!=1 }"><a href="javascript:;" onclick="alert('未支付或已发货！')">发货</a><br></c:if>

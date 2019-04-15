@@ -80,14 +80,33 @@ public class GoodsCtrl extends StringUtil {
 			Integer status,Integer type,Integer is_coupon,HttpServletRequest request) throws Exception {
 
 
-		AbstractApplicationContext ctx   = new ClassPathXmlApplicationContext(new String []{"classpath:applicationContext.xml"});
-		WxSettingService wxSettingService =(WxSettingService)ctx.getBean("wxSettingService") ;
-		WxSetting wxSetting  =  wxSettingService.selectByPrimaryKey(1);
+
 		String add_time =sf.format(new Date());
 //		try {
 //		goods_name = new String(goods_name.getBytes("iso8859-1"),"utf-8");
 		String goods_id = getId();
-		String good_qr_image = createGoodsQr(request, wxSetting, goods_id);
+		String localRedirect_uri = "/main/goodHxWxUser.html?goods_id="+ goods_id;
+		String qrPath = "/upload/goodQr/";
+		String qrName = goods_id + ".jpg";
+
+
+		AbstractApplicationContext ctx   = new ClassPathXmlApplicationContext(new String []{"classpath:applicationContext.xml"});
+		WxSettingService wxSettingService =(WxSettingService)ctx.getBean("wxSettingService") ;
+		WxSetting wxSetting  =  wxSettingService.selectByPrimaryKey(1);
+		String realpath = request.getSession().getServletContext().getRealPath("");
+		String path = "";
+		if(realpath.contains("\\")){
+			path = realpath.substring(0,realpath.lastIndexOf("\\"));
+		}else{
+			path = realpath.substring(0,realpath.lastIndexOf("/"));
+		}
+		path = path+qrPath;
+		String redirect_uri = wxSetting.getLink()+localRedirect_uri;
+		String text ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxSetting.getAppid()+"&redirect_uri="+ URLEncoder.encode(redirect_uri)
+				+ "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
+		QRCodeUtil.encode(text,"", path,true,qrName);
+
+		String good_qr_image = qrPath + qrName;
 		goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
 		map.put("goods_id", goods_id);
 		map.put("goods_name", goods_name);
@@ -104,24 +123,27 @@ public class GoodsCtrl extends StringUtil {
 		return goodsService.insert(map) + "";
 	}
 
-	private String createGoodsQr(HttpServletRequest request, WxSetting wxSetting, String goods_id) throws Exception {
-		String realpath = request.getSession().getServletContext().getRealPath("");
-		String path = "";
-		if(realpath.contains("\\")){
-			path = realpath.substring(0,realpath.lastIndexOf("\\"));
-		}else{
-			path = realpath.substring(0,realpath.lastIndexOf("/"));
-		}
-
-		String goodQrPath = "/upload/goodQr/";
-		String googQrName = goods_id + ".jpg";
-		String redirect_uri = wxSetting.getLink()+"/main/goodHxWxUser.html?goods_id="+ goods_id;
-		String text ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxSetting.getAppid()+"&redirect_uri="+ URLEncoder.encode(redirect_uri)
-				+ "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
-
-		QRCodeUtil.encode(text,"", path+goodQrPath,true,googQrName);
-		return goodQrPath + googQrName;
-	}
+//	private String createGoodsQr(HttpServletRequest request,  String goods_id) throws Exception {
+//		AbstractApplicationContext ctx   = new ClassPathXmlApplicationContext(new String []{"classpath:applicationContext.xml"});
+//		WxSettingService wxSettingService =(WxSettingService)ctx.getBean("wxSettingService") ;
+//		WxSetting wxSetting  =  wxSettingService.selectByPrimaryKey(1);
+//		String realpath = request.getSession().getServletContext().getRealPath("");
+//		String path = "";
+//		if(realpath.contains("\\")){
+//			path = realpath.substring(0,realpath.lastIndexOf("\\"));
+//		}else{
+//			path = realpath.substring(0,realpath.lastIndexOf("/"));
+//		}
+//
+//		String goodQrPath = "/upload/goodQr/";
+//		String googQrName = goods_id + ".jpg";
+//		String redirect_uri = wxSetting.getLink()+"/main/goodHxWxUser.html?goods_id="+ goods_id;
+//		String text ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxSetting.getAppid()+"&redirect_uri="+ URLEncoder.encode(redirect_uri)
+//				+ "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
+//
+//		QRCodeUtil.encode(text,"", path+goodQrPath,true,googQrName);
+//		return goodQrPath + googQrName;
+//	}
 
 	@ResponseBody
 	@RequestMapping(value = "/main/goodsUpdate.html")
@@ -171,18 +193,29 @@ public class GoodsCtrl extends StringUtil {
 		try {
 			String oppen_id = "";
 			String hx_username = "";
-			if (StringUtil.isTest){
+
                 oppen_id = getOppen_id(session);
-                hx_username ="wum";
-            }else {
-                System.out.println("==============================进入goodHxWxUser");
-                map = WxUtil.oppenIdInfo(request, session);
-                oppen_id = (String) map.get("oppen_id");
-                hx_username = (String) map.get("realname");
-                System.out.println("==========================oppen_id:"+oppen_id);
-            }
-			User wxUser = new User();
-			wxUser.setOppen_id(oppen_id);
+			System.out.println("==============================进入goodHxWxUser");
+			System.out.println("这个是session里面的oppen_id"+getOppen_id(session));
+                if (oppen_id==null||"".equals(oppen_id)){
+					map = WxUtil.oppenIdInfo(request, session);
+					oppen_id = (String) map.get("oppen_id");
+					hx_username = (String) map.get("realname");
+				}else {
+					user.setOppen_id(oppen_id);
+					List<User> userList = userService.listById(user);
+					hx_username = userList.get(0).getUsername();
+				}
+
+//                hx_username ="wum";
+//
+//                System.out.println("==============================进入goodHxWxUser");
+//				System.out.println("这个是session里面的oppen_id"+getOppen_id(session)); ;
+//                map = WxUtil.oppenIdInfo(request, session);
+//                oppen_id = (String) map.get("oppen_id");
+//                hx_username = (String) map.get("realname");
+//                System.out.println("==========================oppen_id:"+oppen_id);
+
 			Map<String,Object> map = new HashMap();
 			map.put("hx_oppen_id",oppen_id);
 			map.put("hx_username",hx_username);

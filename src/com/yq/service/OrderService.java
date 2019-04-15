@@ -48,4 +48,7 @@ private OrderDao orderDao;
 		return orderDao.listJsonCount(order) ;
 	}
 
+	public int updateHx(Map<String, Object> map) {
+		return orderDao.updateHx(map);
+	}
 }

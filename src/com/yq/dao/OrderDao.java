@@ -25,4 +25,6 @@ public interface OrderDao {
 	public int count(Order order);
 
 	public int listJsonCount(Order order);
+
+	public int updateHx(Map<String, Object> map);
 }

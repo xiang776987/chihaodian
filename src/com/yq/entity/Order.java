@@ -30,8 +30,26 @@ public class Order extends Page{
 	String express_hm ;
 	String qr_image ;
 	Integer is_coupon ;
+	String hx_oppen_id;
+	String hx_username;
 
-    public String getQr_image() {
+	public String getHx_oppen_id() {
+		return hx_oppen_id;
+	}
+
+	public void setHx_oppen_id(String hx_oppen_id) {
+		this.hx_oppen_id = hx_oppen_id;
+	}
+
+	public String getHx_username() {
+		return hx_username;
+	}
+
+	public void setHx_username(String hx_username) {
+		this.hx_username = hx_username;
+	}
+
+	public String getQr_image() {
         return qr_image;
     }
 
