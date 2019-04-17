@@ -85,7 +85,7 @@ public class GoodsCtrl extends StringUtil {
 //		try {
 //		goods_name = new String(goods_name.getBytes("iso8859-1"),"utf-8");
 		String goods_id = getId();
-		String localRedirect_uri = "/main/goodHxWxUser.html?goods_id="+ goods_id;
+		String localRedirect_uri = "/page/goodHxWxUser.html?goods_id="+ goods_id;
 		String qrPath = "/upload/goodQr/";
 		String qrName = goods_id + ".jpg";
 
@@ -100,11 +100,10 @@ public class GoodsCtrl extends StringUtil {
 		}else{
 			path = realpath.substring(0,realpath.lastIndexOf("/"));
 		}
-		path = path+qrPath;
 		String redirect_uri = wxSetting.getLink()+localRedirect_uri;
 		String text ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxSetting.getAppid()+"&redirect_uri="+ URLEncoder.encode(redirect_uri)
 				+ "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
-		QRCodeUtil.encode(text,"", path,true,qrName);
+		QRCodeUtil.encode(text,path+"/upload/qr_img.jpg", path+qrPath,true,qrName);
 
 		String good_qr_image = qrPath + qrName;
 		goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
@@ -137,7 +136,7 @@ public class GoodsCtrl extends StringUtil {
 //
 //		String goodQrPath = "/upload/goodQr/";
 //		String googQrName = goods_id + ".jpg";
-//		String redirect_uri = wxSetting.getLink()+"/main/goodHxWxUser.html?goods_id="+ goods_id;
+//		String redirect_uri = wxSetting.getLink()+"/page/goodHxWxUser.html?goods_id="+ goods_id;
 //		String text ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxSetting.getAppid()+"&redirect_uri="+ URLEncoder.encode(redirect_uri)
 //				+ "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
 //
@@ -187,9 +186,23 @@ public class GoodsCtrl extends StringUtil {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/main/goodHxWxUser.html")
+    @RequestMapping(value = "/page/goodHxWxUser.html")
     public Object hxWxUser(HttpSession session,Long goods_id,HttpServletRequest request) {
 
+        if(goods_id==null||"".equals(goods_id)){
+            return "商品不能为空";
+        }
+        Goods parameterGoods = new Goods();
+        Goods returnGoods = new Goods();
+        parameterGoods.setGoods_id(goods_id);
+        List<Goods> list = goodsService.listById(parameterGoods);
+        if (list.size()==0){
+            return "商品异常";
+        }
+        returnGoods = list.get(0);
+        if (returnGoods.getHx_oppen_id()!=null&&!"".equals(returnGoods.getHx_oppen_id())&&"null".equals(returnGoods.getHx_oppen_id())){
+            return "此商品已有核销人员，如要更换核销人员请联系管理员";
+        }
 		try {
 			String oppen_id = "";
 			String hx_username = "";
@@ -204,7 +217,10 @@ public class GoodsCtrl extends StringUtil {
 				}else {
 					user.setOppen_id(oppen_id);
 					List<User> userList = userService.listById(user);
-					hx_username = userList.get(0).getUsername();
+					hx_username = userList.get(0).getRealname();
+				}
+				if(oppen_id==null||"null".equals(oppen_id)){
+                	return "核销失败";
 				}
 
 //                hx_username ="wum";

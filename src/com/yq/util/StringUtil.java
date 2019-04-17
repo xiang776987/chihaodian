@@ -4,7 +4,7 @@ import javax.servlet.http.HttpSession;
 
 public class StringUtil {
 
-	public static boolean isTest = true;
+	public static boolean isTest = true ;
 	protected Integer pagesize_1 = 10;
 
 

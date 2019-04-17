@@ -43,13 +43,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		}else {
 			flag = session.getAttribute("oppen_id") != null ? true : false;
 			String url = (request.getRequestURL() + "?" + request.getQueryString()).toString();
-			System.out.println(">>>: " + url);
+			System.out.println("1>>>: " + url);
 			for (String s : IGNORE_URI) {
+				System.out.println(s);
 				if (url.contains(s)) {
 					flag = true;
 					break;
 				}
 			}
+			System.out.println("2>>>:"+flag);
 			log.info("url>>>: " + url);
 			if (!flag) {
 				AbstractApplicationContext ctx   = new ClassPathXmlApplicationContext(new String []{"classpath:applicationContext.xml"});

@@ -99,12 +99,20 @@ public class OrderCtrl extends StringUtil {
 	@ResponseBody
 	@RequestMapping(value = "/main/orderHx.html")
 	public Object orderHx(HttpSession session,String order_id,HttpServletRequest request) {
-
-		try {
+        try {
+	     if (order_id==null||"".equals(order_id)||"null".equals(order_id)){
+	        return "订单号异常";
+        }
+        Order order = new Order();
+        order.setOrder_id(order_id);
+        order =  orderService.listById(order).get(0);
+        if(order.getStatus()!=1){
+            return "核销失败，只有未使用的二维码才能核销";
+        }
 			String oppen_id = "";
 			String hx_username = "";
             oppen_id = getOppen_id(session);
-            System.out.println("==============================进入goodHxWxUser");
+            System.out.println("==============================进入orderHx");
             System.out.println("这个是session里面的oppen_id"+getOppen_id(session));
             if (oppen_id==null||"".equals(oppen_id)){
                 map = WxUtil.oppenIdInfo(request, session);
@@ -113,27 +121,23 @@ public class OrderCtrl extends StringUtil {
             }else {
                 user.setOppen_id(oppen_id);
                 List<User> userList = userService.listById(user);
-                hx_username = userList.get(0).getUsername();
+                hx_username = userList.get(0).getRealname();
             }
-            Order order = new Order();
-            order.setOrder_id(order_id);
-            order =  orderService.listById(order).get(0);
+			if(oppen_id==null){
+				return "核销失败";
+			}
             String goods_id = order.getGoods_id();
             Goods findGoods = new Goods();
             findGoods.setGoods_id(Long.valueOf(goods_id));
             List<Goods> list = goodsService.listById(findGoods); // 获取订单信息
             Goods goods = list.get(0);
             if (oppen_id.equals(goods.getHx_oppen_id())){
-                if(order.getStatus()==1){
                     Map<String,Object> updateMap = new HashMap<>();
                     Map<String,Object> map = new HashMap();
                     map.put("hx_oppen_id",oppen_id);
                     map.put("hx_username",hx_username);
                     map.put("order_id",order_id);
                     int i = orderService.updateHx(map);
-                }else {
-                    return "核销失败，只有未使用的二维码才能核销";
-                }
             }else {
                 return "你不是该商品的核销人员";
             }
@@ -189,14 +193,11 @@ public class OrderCtrl extends StringUtil {
 		}else{
 			path = realpath.substring(0,realpath.lastIndexOf("/"));
 		}
-        path = path+qrPath;
         String redirect_uri = wxSetting.getLink()+localRedirect_uri;
         String text ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+wxSetting.getAppid()+"&redirect_uri="+ URLEncoder.encode(redirect_uri)
                 + "&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect";
-        QRCodeUtil.encode(text,"", path,true,qrName);
+        QRCodeUtil.encode(text,path+"/upload/qr_img.jpg", path+qrPath,true,qrName);
         String qr_image = qrPath + qrName;
-
-
 
 		order.setOrder_id(order_id);
 		order.setGoods_id(goods_id);

@@ -67,8 +67,10 @@ document.body.addEventListener('touchmove',function(e){
                             <p class="p1 p-txt" onclick="window.location.href='goodsListById.html?goods_id=${goodsList.goods_id}'"><a>${goodsList.goods_name}</a></p>
                             <p class="p2 p-txt" onclick="window.location.href='goodsListById.html?goods_id=${goodsList.goods_id}'"><span class="price-1">${goodsList.goods_spe}</span></p>
                             <p class="p3 p-txt" style="float: left;" onclick="window.location.href='goodsListById.html?goods_id=${goodsList.goods_id}'"><span class="price-1" style="font-size: 18px">&yen;${goodsList.goods_price}</span></p>
-                          <p style="float: right;margin-top: 10px"> <a href="javascript:;" onclick="add('${goodsList.goods_id}','${goodsList.goods_name}','${goodsList.goods_img}','${goodsList.goods_spe}','${goodsList.goods_price}')"><img src="images/sjsc-09.gif" style="width: 25px;height: 25px"></a>
+                            <c:if test="${goodsList.is_coupon !=1}">
+                            <p style="float: right;margin-top: 10px"> <a href="javascript:;" onclick="add('${goodsList.goods_id}','${goodsList.goods_name}','${goodsList.goods_img}','${goodsList.goods_spe}','${goodsList.goods_price}')"><img src="images/sjsc-09.gif" style="width: 25px;height: 25px"></a>
                   			 </p>
+                            </c:if>
                         </div>    
                     </li>
                     

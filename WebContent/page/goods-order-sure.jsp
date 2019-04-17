@@ -338,6 +338,11 @@ $(function(){
 		var note= $('#note').val();
 		
     	var addr_name=addr_user+' '+addr_tel+' '+province+' '+city+' '+ area+' '+addr_name;
+
+        if (Is_coupon==1) {
+
+            addr_name = "";
+        }
     	$.ajax({
 			url:'orderInsert.html',
 			type:'post',

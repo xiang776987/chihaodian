@@ -29,9 +29,7 @@
 <title>意见反馈</title>
 </head>
 <body>
-<div id="qrcode">
-	<img id="image" width="100%" height="100%" src="">
-</div>
+
 	<nav class="breadcrumb">
 		<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>
 		查看 <a class="btn btn-success radius r mr-20"

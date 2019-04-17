@@ -22,10 +22,10 @@
 
         #qrcode img {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100px;
-            height: 100px;
+            top: 40%;
+            left: 30%;
+            width: 200px;
+            height: 200px;
             display: block;
         }
 

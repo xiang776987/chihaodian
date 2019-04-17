@@ -32,5 +32,6 @@
     <orderEntry type="library" name="org.eclipse.jst.j2ee.internal.module.container" level="application" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="library" name="aopalliance-1.0" level="project" />
+    <orderEntry type="library" name="core-3.3.0" level="project" />
   </component>
 </module>
