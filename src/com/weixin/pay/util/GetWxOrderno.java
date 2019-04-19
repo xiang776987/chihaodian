@@ -77,6 +77,19 @@ public class GetWxOrderno {
 			Document doc;
 
 			doc = builder.build(in);
+            // 这是优先选择. 如果不允许DTDs (doctypes) ,几乎可以阻止所有的XML实体攻击
+			String FEATURE = "http://apache.org/xml/features/disallow-doctype-decl";
+			builder.setFeature(FEATURE, true);
+
+			FEATURE = "http://xml.org/sax/features/external-general-entities";
+			builder.setFeature(FEATURE, false);
+
+			FEATURE = "http://xml.org/sax/features/external-parameter-entities";
+			builder.setFeature(FEATURE, false);
+
+			FEATURE = "http://apache.org/xml/features/nonvalidating/load-external-dtd";
+			builder.setFeature(FEATURE, false);
+
 
 			Element root = doc.getRootElement();
 			List list = root.getChildren();
