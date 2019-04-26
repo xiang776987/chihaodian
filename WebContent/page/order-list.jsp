@@ -314,8 +314,8 @@
                 	<c:if test="${list.status==1}">
                		    <button class="my-btn1 f-r" onclick="send('${list.order_id}')">退款</button>
                         <c:if test="${list.is_coupon==1}">
-                            <button class="my-btn1 f-r" onclick="qrToggle('${list.qr_image}')">查看二维码</button>
-                            <button class="my-btn1 f-r" onclick="shows('${list.order_id}')">输入验证码</button>
+                            <button class="my-btn1 f-r" onclick="qrToggle('${list.qr_image}')">二维码</button>
+                            <button class="my-btn1 f-r" onclick="shows('${list.order_id}')">验证码</button>
                         </c:if>
                 	</c:if>
 

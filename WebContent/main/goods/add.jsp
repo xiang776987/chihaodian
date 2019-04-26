@@ -89,7 +89,7 @@
 						</div>
 			</div><br>
 		<div class="row cl">
-			<label class="form-label col-2">是否优惠卷：</label>
+			<label class="form-label col-2">是否虚拟物品：</label>
 			<div class="formControls col-10">
 				<select id="is_coupon" class="input-text" style="width: 80%">
 					<c:if test="${list.is_coupon==1}"><option value="1">是</option></c:if>
@@ -130,7 +130,46 @@
 							<input type="text" id="goods_price"
 								placeholder="请填写价格" value="" class="input-text" style="width: 80%">
 						</div>
-			</div><br>
+			</div>
+		<br>
+		<div class="row cl">
+
+			<label class="form-label col-2">原价：</label>
+			<div class="formControls col-10">
+				<input type="text" id="goods_old_price"
+					   placeholder="请填写原价" value="" class="input-text" style="width: 80%">
+			</div>
+		</div>
+
+		<br>
+		<div class="row cl">
+
+			<label class="form-label col-2">商品总数：</label>
+			<div class="formControls col-10">
+				<input type="text" id="order_total"
+					   placeholder="请填写商品总数" value="" class="input-text" style="width: 80%">
+			</div>
+		</div>
+		<br>
+		<div class="row cl">
+
+			<label class="form-label col-2">单次购买数量：</label>
+			<div class="formControls col-10">
+				<input type="text" id="single_quantity"
+					   placeholder="请填写单次购买数量" value="" class="input-text" style="width: 80%">
+			</div>
+		</div>
+		<br>
+		<div class="row cl">
+
+			<label class="form-label col-2">核销验证码：</label>
+			<div class="formControls col-10">
+				<input type="text" id="hxyzm"
+					   placeholder="请填写核销验证码" value="" class="input-text" style="width: 80%">
+			</div>
+		</div>
+
+			<br>
 			<div class="row cl">
 			
 						<label class="form-label col-2">详情：</label>
@@ -159,11 +198,17 @@
 		var goods_detail = $('#goods_detail').val();
 		var is_coupon = $('#is_coupon').val();
 
+        var hxyzm = $('#hxyzm').val();
+        var goods_old_price = $('#goods_old_price').val();
+        var order_total = $('#order_total').val();
+        var single_quantity = $('#single_quantity').val();
+
 		$.ajax({
 			url:'goodsInsert.html',
 			type:'post',
 			data:'goods_name='+encodeURI(goods_name)+'&ctg_id='+ctg_id+'&goods_img='+goods_img+'&goods_spe='+goods_spe
-			+'&goods_price='+goods_price+'&goods_detail='+goods_detail+'&is_coupon='+is_coupon,
+			+'&goods_price='+goods_price+'&goods_detail='+goods_detail+'&is_coupon='+is_coupon
+            +'&hxyzm='+hxyzm+'&goods_old_price='+goods_old_price+'&order_total='+order_total+'&single_quantity='+single_quantity,
 			success:function(rs){
 				if(rs==1){
 					

@@ -101,7 +101,7 @@
                 <dl class="ssjg-dl1">
                 	<dt>
                 	<%-- <p class="ssjg-p2" style="font-size: 9px;"><span>${goodsList.goods_spe}</span></p> --%>
-                    <p class="ssjg-p1" style="margin-top:10px;"><span>￥${goodsList.goods_price}</span></p>
+                    <p class="ssjg-p1" style="margin-top:10px;float: right;"><span>￥${goodsList.goods_price}</span></p>
                     </dt>
                     <dd>
                         <c:if test="${goodsList.is_coupon !='1'}">
@@ -136,7 +136,9 @@
                 <dl class="ssjg-dl1">
                 	<dt>
                 	<%-- <p class="ssjg-p2" style="font-size: 9px"><span>${glist.goods_spe}</span></p> --%>
-                    <p class="ssjg-p1" style="margin-top:10px"><span>￥${glist.goods_price}</span></p>
+                        <p class="ssjg-p1" style="margin-top:10px"><span>￥${glist.goods_price}</span><span style="margin-left:10px;color:#3A3636;">原价</span><span >￥${glist.goods_old_price}</span></p>
+
+
                     </dt>
                     <dd>
                         <c:if test="${glist.is_coupon !='1'}">

@@ -77,7 +77,9 @@ public class GoodsCtrl extends StringUtil {
 	@RequestMapping(value = "/main/goodsInsert.html")
 	public String insert(String goods_name, String goods_img,String goods_spe,
 			Float goods_price, String goods_detail, Integer ctg_id,
-			Integer status,Integer type,Integer is_coupon,HttpServletRequest request) throws Exception {
+			Integer status,Integer type,Integer is_coupon,HttpServletRequest request
+			,String hxyzm,String goods_old_price,String order_total,String single_quantity,String sales_start_time,String sales_end_time,String use_start_time,String use_end_time
+	) throws Exception {
 
 
 
@@ -119,6 +121,15 @@ public class GoodsCtrl extends StringUtil {
 		map.put("good_qr_image", good_qr_image);
 		map.put("status", 1);
 		map.put("type", 1);
+
+		map.put("hxyzm", hxyzm);
+		map.put("goods_old_price", goods_old_price);
+		map.put("order_total", order_total);
+		map.put("single_quantity", single_quantity);
+		map.put("sales_start_time", sales_start_time);
+		map.put("sales_end_time", sales_end_time);
+		map.put("use_start_time", use_start_time);
+		map.put("use_end_time", use_end_time);
 		return goodsService.insert(map) + "";
 	}
 
@@ -148,7 +159,9 @@ public class GoodsCtrl extends StringUtil {
 	@RequestMapping(value = "/main/goodsUpdate.html")
 	public Object update(String goods_name, String goods_img,String goods_spe,
 			Float goods_price, String goods_detail, String add_time,
-			Integer ctg_id, Long goods_id,Integer is_coupon) throws UnsupportedEncodingException {
+			Integer ctg_id, Long goods_id,Integer is_coupon
+						 ,String hxyzm,String goods_old_price,String order_total,String single_quantity,String sales_start_time,String sales_end_time,String use_start_time,String use_end_time
+	) throws UnsupportedEncodingException {
 		goods_name = java.net.URLDecoder.decode(goods_name,"utf-8") ;
 		map.put("goods_name", goods_name);
 		map.put("goods_img", goods_img);		
@@ -160,6 +173,14 @@ public class GoodsCtrl extends StringUtil {
 		map.put("goods_id", goods_id);
 		map.put("is_coupon", is_coupon);
 		map.put("type", 1);
+		map.put("hxyzm", hxyzm);
+		map.put("goods_old_price", goods_old_price);
+		map.put("order_total", order_total);
+		map.put("single_quantity", single_quantity);
+		map.put("sales_start_time", sales_start_time);
+		map.put("sales_end_time", sales_end_time);
+		map.put("use_start_time", use_start_time);
+		map.put("use_end_time", use_end_time);
 		return goodsService.update(map) + "";
 
 	}
