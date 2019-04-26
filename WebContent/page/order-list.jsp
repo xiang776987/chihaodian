@@ -14,11 +14,122 @@
 <script type="text/javascript" src="js/woxiangyao.js"></script>
 
     <style>
-        #main {
-            margin-top: 50px;
-            border: 1px solid black;
-            cursor: pointer;
+        body {
+            margin: 0 auto;
         }
+
+        .cont {
+            position: relative;
+            width: 100%;
+            height: 70px;
+        }
+        /*显示按钮*/
+
+        .shows {
+            position: absolute;
+            left: 0;
+            width: 50%;
+            font-size: 20px;
+            height: 70px;
+            text-align: center;
+            background-color: #2AC845;
+            color: #fff;
+            line-height: 70px;
+        }
+        /*隐藏*/
+
+        .nones {
+            position: absolute;
+            right: 0;
+            width: 50%;
+            font-size: 20px;
+            height: 70px;
+            text-align: center;
+            background-color: #DD524D;
+            color: #fff;
+            line-height: 70px;
+        }
+        /*弹窗*/
+
+        .dislog {
+            position: fixed;
+            z-index: 999;
+            width: 100%;
+            height: 100%;
+            display: none;
+            text-align: center;
+            background-color: rgba(0,0,0,0.8);
+        }
+        /*状态*/
+
+        .list {
+            position: relative;
+            width: 100%;
+            height: 70px;
+        }
+
+        .dis_cont {
+            position: relative;
+            border-radius: 10px;
+            top: 25%;
+            width: 80%;
+            display: inline-block;
+            height: 160px;
+            background-color: #9b9b9b;
+        }
+        /*确认取消*/
+
+        .dis_bott {
+            position: absolute;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            height: 70px;
+            background-color: #f5f5f5;
+            bottom: 0px;
+        }
+        /*取消按钮*/
+
+        .left_name {
+            position: absolute;
+            border-bottom-left-radius: 10px;
+            text-align: center;
+            left: 0px;
+            width: 50%;
+            height: 70px;
+            line-height: 70px;
+            background-color: #fff;
+        }
+        /*确认*/
+
+        .right_name {
+            position: absolute;
+            text-align: center;
+            border-bottom-right-radius: 10px;
+            right: 0px;
+            width: 49%;
+            height: 70px;
+            line-height: 70px;
+            background-color: #fff;
+        }
+        /* 提示*/
+
+        .cont_dis {
+            position: relative;
+            border-radius: 10px;
+            text-align: center;
+            width: 100%;
+            height: 90px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            box-sizing: border-box;
+            padding: 20px 20px;
+        }
+
+
 
         #qrcode img {
             position: absolute;
@@ -39,6 +150,54 @@
             z-index: 9999;
             display: none;
         }
+
+
+        .modal-alert {
+            width: 270px;
+            position: fixed;
+            z-index: 1110;
+            left: 50%;
+            margin-left: -135px;
+            margin-top: 0;
+            top: 30%;
+            text-align: center;
+            border-radius: 0;
+            perspective: 1000px;
+        }
+        .modal-alert_nav {
+            border-radius: 0;
+            background: #f8f8f8;}
+        .modal-alert-bd {
+            padding: 15px 10px;
+            text-align: center;
+            border-bottom: 1px solid #dedede;
+            border-radius: 2px 2px 0 0;}
+        .modal-alert-bd  input{
+            height: 34px;
+            border-radius: 4px;
+            border:1px solid #dedede;
+            padding: 0 4px;
+        }
+        .modal-alert-footer {
+            height: 35px;
+            overflow: hidden;
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .modal-alert-btn {
+            display: table-cell!important;
+            padding: 0 5px;
+            height: 34px;
+            box-sizing: border-box!important;
+            font-size: 15px;
+            line-height: 34px;
+            text-align: center;
+            color: #0e90d2;
+            cursor: pointer;
+            border-left: 1px solid #dedede;
+            margin-left:-1px;}
+
     </style>
 
 
@@ -51,12 +210,58 @@
 
     <div class="sjsc-title2">
     	<h3 class="sjsc-t2l">我的订单</h3>
+
+
+        <div class="dislog" style="display: {{nones}};">
+          <%--  <div>
+                <!--内容-->
+                <div class="dis_cont">
+                    <div  >
+                        <input type="text" id="yzm"
+                               class="input-text" style="width: 80%">
+                        <input type="hidden"  id="yzm_order_id">
+                    </div>
+
+                    <div >
+                        <label class="left_name" onclick="cances()">取消</label>
+                        <label class="right_name" onclick="submits()">确认</label>
+
+                    </div>
+
+                </div>
+            </div>--%>
+
+                <div class="modal-alert">
+                    <div class="modal-alert_nav">
+                        <div class="modal-alert-bd">
+                            <input type="text" name="" placeholder="输入验证码">
+                        </div>
+                        <div class="modal-alert-footer">
+                            <label class="modal-alert-btn" onclick="submits()">确认</label>
+                            <label class="modal-alert-btn" onclick="cances()">取消</label>
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
+       <%-- <div class="cont">
+            <div class="list">
+                <label class="shows" onclick="shows()">显示</label>
+                <label class="nones" onclick="nones()">隐藏</label>
+            </div>
+        </div>--%>
+
+
+
         <a href="center.html" class="sjsc-t2r"><img src="images/back.png" alt="" style="width:20px;height: 20px;padding-top: 11px;padding-left: 5px"/></a>
     </div>
     <ul class="quanbu-title2">
     	<li class="current" style="display: inline;"><a href="JavaScript:;">全部</a></li>
     	<li style="display: inline;"><a href="JavaScript:;">待支付</a></li>
-    	<li style="display: inline;"><a href="JavaScript:;">待发货</a></li>
+    	<li style="display: inline;"><a href="JavaScript:;">
+            待发货
+        </a></li>
     	<li style="display: inline;"><a href="JavaScript:;">已发货</a></li>
         <div style="clear:both;"></div>
     </ul>
@@ -105,11 +310,12 @@
                 	<button class="my-btn1 f-r" onclick="window.location.href='order.html?order_id=${list.order_id}'">物流查询</button>
                 	</c:if>
                 	<button class="my-btn1 f-r" >￥${list.goods_total}</button>
-                	
+
                 	<c:if test="${list.status==1}">
                		    <button class="my-btn1 f-r" onclick="send('${list.order_id}')">退款</button>
                         <c:if test="${list.is_coupon==1}">
                             <button class="my-btn1 f-r" onclick="qrToggle('${list.qr_image}')">查看二维码</button>
+                            <button class="my-btn1 f-r" onclick="shows('${list.order_id}')">输入验证码</button>
                         </c:if>
                 	</c:if>
 
@@ -244,6 +450,43 @@
     <jsp:include page="footer5.jsp"></jsp:include>	
     		
     		<script type="text/javascript">
+
+                //显示遮罩弹窗
+                function shows(order_id){
+                    $('#yzm_order_id').val(order_id);
+                    // alert($('#yzm_order_id').val());
+                    $(".dislog").css("display","block");
+                }
+                //隐藏遮罩弹窗
+                function nones(){
+                    $(".dislog").css("display","none");
+                }
+                function submits(order_id){
+
+                    var yzm = $('#yzm').val();
+                    var order_id =$('#yzm_order_id').val();
+                    // alert($('#yzm_order_id').val())
+                    // alert($('#yzm').val())
+                    $.ajax({
+                        url:'yzmhx.html',
+                        type:'post',
+                        data:'yzm='+yzm+'&order_id='+order_id,
+                        success:function(rs){
+                            alert(rs);
+                            if (rs=='核销成功'){
+                                window.location.reload(true)
+                            }
+
+
+                        }
+                    })
+                }
+                //取消
+                function cances(){
+                    $(".dislog").css("display","none");
+                }
+
+
     		function send(order_id){
     			var  b = confirm('确定退款吗？');
         		if(!b){

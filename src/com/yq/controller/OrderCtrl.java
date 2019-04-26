@@ -273,6 +273,44 @@ public class OrderCtrl extends StringUtil {
 		return orderService.upstatus(map) + "";
 	}
 
+
+	/**
+	 * 通过验证码核销订单
+	 * @param order_id
+	 * @param yzm
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/page/yzmhx.html")
+	public Object yzmhx(String order_id,  String yzm) {
+		Order order = new Order();
+		order.setOrder_id(order_id);
+		order =  orderService.listById(order).get(0);
+		if(order.getStatus()!=1){
+			return "核销失败，只有未使用的二维码才能核销";
+		}
+		String goods_id = order.getGoods_id();
+		Goods findGoods = new Goods();
+		findGoods.setGoods_id(Long.valueOf(goods_id));
+		List<Goods> list = goodsService.listById(findGoods); // 获取订单信息
+		Goods goods = list.get(0);
+		String hxyzm = goods.getHxyzm();
+		if(hxyzm==null||"".equals(hxyzm)||"null".equals(hxyzm)){
+            return "核销码错误";
+		}else{
+			if (hxyzm.equals(yzm)){
+				map.put("order_id", order_id);
+				map.put("status", "2");
+				orderService.upstatus(map);
+				return "核销成功";
+			}else {
+				return "核销码错误";
+			}
+		}
+	}
+
+
+
 	@ResponseBody
 	@RequestMapping(value = "/main/orderprice.html")
 	public Object orderprice(String order_id,String goods_total, HttpSession session) {

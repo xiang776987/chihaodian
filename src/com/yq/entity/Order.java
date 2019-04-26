@@ -28,10 +28,20 @@ public class Order extends Page{
 	String express_dm ;
 	String express_name ;
 	String express_hm ;
-	String qr_image ;
-	Integer is_coupon ;
-	String hx_oppen_id;
-	String hx_username;
+	String qr_image ;//二维码图片地址
+	Integer is_coupon ;//是否虚拟商品
+	String hx_oppen_id;//核销人微信openid；
+	String hx_username;//核销人姓名
+String del_flag;//删除标记
+
+
+	public String getDel_flag() {
+		return del_flag;
+	}
+
+	public void setDel_flag(String del_flag) {
+		this.del_flag = del_flag;
+	}
 
 	public String getHx_oppen_id() {
 		return hx_oppen_id;

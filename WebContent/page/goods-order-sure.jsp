@@ -110,6 +110,7 @@ $(function(){
         <div style="clear:both;"></div>
     </div>
     </c:if>
+<c:if test="${Is_coupon!='1'}">
    <div style="font-size: 12px;padding-left:5px; margin-top:13px;color: #A09E9E">
   	  配送方式
     </div>
@@ -145,6 +146,7 @@ $(function(){
     <option value="-2">请选择自提点</option>
     </select>
     </div>
+</c:if>
     <div style="font-size: 12px;padding-left:5px; margin-top:13px;color: #A09E9E">
   	 备注
     </div>

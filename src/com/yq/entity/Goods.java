@@ -18,6 +18,88 @@ public class Goods extends Page{
 	String hx_oppen_id;
 	String good_qr_image;
 
+	String hxyzm;//核销用验证码
+	String goods_old_price;//原价
+	String order_total;//商品总数
+	String single_quantity;//单次能购买的数量
+	String sales_start_time;//销售开始的时间
+	String sales_end_time;//销售结束的时间
+	String use_start_time;//使用开始的时间
+	String use_end_time;//使用结束时间
+	String del_flag;//删除标记
+
+	public String getDel_flag() {
+		return del_flag;
+	}
+
+	public void setDel_flag(String del_flag) {
+		this.del_flag = del_flag;
+	}
+
+	public String getHxyzm() {
+		return hxyzm;
+	}
+
+	public void setHxyzm(String hxyzm) {
+		this.hxyzm = hxyzm;
+	}
+
+	public String getGoods_old_price() {
+		return goods_old_price;
+	}
+
+	public void setGoods_old_price(String goods_old_price) {
+		this.goods_old_price = goods_old_price;
+	}
+
+	public String getOrder_total() {
+		return order_total;
+	}
+
+	public void setOrder_total(String order_total) {
+		this.order_total = order_total;
+	}
+
+	public String getSingle_quantity() {
+		return single_quantity;
+	}
+
+	public void setSingle_quantity(String single_quantity) {
+		this.single_quantity = single_quantity;
+	}
+
+	public String getSales_start_time() {
+		return sales_start_time;
+	}
+
+	public void setSales_start_time(String sales_start_time) {
+		this.sales_start_time = sales_start_time;
+	}
+
+	public String getSales_end_time() {
+		return sales_end_time;
+	}
+
+	public void setSales_end_time(String sales_end_time) {
+		this.sales_end_time = sales_end_time;
+	}
+
+	public String getUse_start_time() {
+		return use_start_time;
+	}
+
+	public void setUse_start_time(String use_start_time) {
+		this.use_start_time = use_start_time;
+	}
+
+	public String getUse_end_time() {
+		return use_end_time;
+	}
+
+	public void setUse_end_time(String use_end_time) {
+		this.use_end_time = use_end_time;
+	}
+
 	public String getGood_qr_image() {
 		return good_qr_image;
 	}

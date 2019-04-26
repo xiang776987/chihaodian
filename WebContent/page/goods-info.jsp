@@ -68,12 +68,12 @@
         <c:set value="${list.is_coupon}" var="is_coupon"></c:set>
     </c:forEach>
     <div class="spxq-info3">
-    	<button class="if3-btnn if3-btn1 f-l"
-<c:if test="${is_coupon ==1}">
-                style="width: 100%"
-</c:if>
-    onclick="window.location.href='goodsOrder.html?goods_id=${goods_id}'">立即购买</button>
-<c:if test="${is_coupon !=1}">
+        <c:if test="${is_coupon ==1}">
+            <button class="if3-btnn if3-btn1 f-l" style="width: 100%"
+                    onclick="window.location.href='goodsOrderSure.html?goods_id=${goods_id}&goods_num=1'">立即购买</button>
+        </c:if>
+        <c:if test="${is_coupon !=1}">
+        <button class="if3-btnn if3-btn1 f-l" onclick="window.location.href='goodsOrder.html?goods_id=${goods_id}'">立即购买</button>
         <button class="if3-btnn if3-btn2 f-l" onclick="add()">加入购物车</button>
         <a href="cartList.html" class="if3-aa f-l"><img src="images/cart.png" /><span style="position:fixed;color: #ff3c00" id="cart_num">${cart_num }</span></a>
 </c:if>

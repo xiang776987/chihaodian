@@ -50,6 +50,7 @@
                     <div style="clear:both;"></div>
                 </dl>
                 </c:forEach>
+                    <c:if test="${list.is_coupon!='1'}">
     <div class="drdd-info2">
     	<p class="p1 f-l">地址：<span >${list.addr_name}</span></p>
         <div style="clear:both;"></div>
@@ -60,12 +61,14 @@
     	<c:if test="${list.receive!=''}">自提点：${list.receive}</c:if></span></p>
         <div style="clear:both;"></div>
     </div>
+                    </c:if>
     <c:if test="${!empty list.note}">
     <div class="drdd-info2">
     	<p class="p1 f-l">备注：<span >${list.note}</span></p>
         <div style="clear:both;"></div>
     </div> 
     </c:if>
+                <input type="hidden" id="isPay" name="isPay" value="2" />
                 <div class="my-p2">
                 	<span class="my-sp3 f-l">共${list.goods_total_num}件商品</span>
                    <p class="my-sp3 f-r">总计：￥${list.goods_total}</p>
@@ -76,17 +79,26 @@
         </div>
         <c:forEach items="${map['list']}" var="list">
         <c:if test="${list.goods_total==0}">
-        <button class="drdd-btn" onclick="window.location.href='orderUpdate.html?order_id=${list.order_id}'">确认下单</button>
+          <button class="drdd-btn" onclick="window.location.href='orderUpdate.html?order_id=${list.order_id}'">确认下单</button>
         </c:if>
          <c:if test="${list.goods_total>0}">
-        <button class="drdd-btn" onclick="callpay()">微信支付</button>
+            <button class="drdd-btn" onclick="callpay()">微信支付</button>
         </c:if>
         
         </c:forEach>
     </div>
     	<script type="text/javascript">
   	function callpay(){
-  		
+
+  		var isPay = $('#isPay').val();
+ if(isPay=='1'){
+     alert("请不要重复点击支付");
+ }
+
+
+
+
+        $('#isPay').val("1");
 		 WeixinJSBridge.invoke('getBrandWCPayRequest',{
 			 "appId" : "<%=request.getAttribute("appId")%>","timeStamp" : "<%=request.getAttribute("timeStamp")%>", "nonceStr" : "<%=request.getAttribute("nonceStr")%>", "package" : "<%=request.getAttribute("package")%>","signType" : "MD5", "paySign" : "<%=request.getAttribute("paySign")%>" 
    			},function(res){
@@ -95,9 +107,11 @@
 	            if(res.err_msg == "get_brand_wcpay_request:ok"){  
 	                alert("微信支付成功!");  
 	                window.location.href='orderList.html';
-	            }else if(res.err_msg == "get_brand_wcpay_request:cancel"){  
-	                alert("用户取消支付!");  
-	            }else{  
+	            }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+                    $('#isPay').val("2");
+	                alert("用户取消支付!");
+	            }else{
+                    $('#isPay').val("2");
 	               alert("支付失败!");  
 	            }  
 			})
