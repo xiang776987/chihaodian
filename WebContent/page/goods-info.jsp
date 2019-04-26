@@ -70,7 +70,7 @@
     <div class="spxq-info3">
         <c:if test="${is_coupon ==1}">
             <button class="if3-btnn if3-btn1 f-l" style="width: 100%"
-                    onclick="window.location.href='goodsOrderSure.html?goods_id=${goods_id}&goods_num=1'">立即购买</button>
+                    onclick="window.location.href='goodsOrder.html?goods_id=${goods_id}'">立即购买</button>
         </c:if>
         <c:if test="${is_coupon !=1}">
         <button class="if3-btnn if3-btn1 f-l" onclick="window.location.href='goodsOrder.html?goods_id=${goods_id}'">立即购买</button>

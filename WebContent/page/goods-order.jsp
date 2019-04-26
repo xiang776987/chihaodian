@@ -34,13 +34,13 @@
                 <p class="gwc-p1">商城价：<span>￥${list.goods_price}</span></p>
             </div>
             <c:if test="${list.goods_price!=0}">
-            <c:if test="${list.is_coupon !=1}">
-                <a href="javascript:;" onclick="plus('${list.goods_id}','${list.goods_price}','${s.count}')" class="gwc-del f-r"><img src="images/11.png" style="width: 28px;height: 25px"></a>
-            </c:if>
+            <%--<c:if test="${list.is_coupon !=1}">--%>
+                <a href="javascript:;" onclick="plus('${list.goods_id}','${list.goods_price}','${s.count}','${list.single_quantity}')" class="gwc-del f-r"><img src="images/11.png" style="width: 28px;height: 25px"></a>
+            <%--</c:if>--%>
                 <a href="#" class="gwc-del f-r" id="goods_num" style="padding-top:4px;width: 16px">${list.goods_num}</a>
-            <c:if test="${list.is_coupon !=1}">
+            <%--<c:if test="${list.is_coupon !=1}">--%>
                 <a href="javascript:;" onclick="min('${list.goods_id}','${list.goods_price}','${s.count}')" class="gwc-del f-r"><img src="images/22.png" style="width: 28px;height: 25px"></a>
-            </c:if>
+            <%--</c:if>--%>
             </c:if>
             <c:if test="${list.goods_price==0}">
             <a href="javascript:;" onclick="del('${list.goods_id}')" class="gwc-del f-r"><img src="images/sjsc-10.gif"></a>
@@ -60,15 +60,27 @@
     </div>
     <jsp:include page="footer3.jsp"></jsp:include>
     <script type="text/javascript">
-    function plus(goods_id,goods_price,sort){
+    function plus(goods_id,goods_price,sort,single_quantity){
+
+
     	var goods_num1=$('#goods_num').text();
     	var goods_num = parseInt(goods_num1)+1;
+        if(single_quantity!=null&&single_quantity!=''&&single_quantity!='null'&&single_quantity!='undefined'){
+            if(goods_num>single_quantity){
+                alert("该商品一次最多只能购买"+single_quantity+"个");
+                return false;
+            }
+        }
+
     	$('#goods_num').text(goods_num);
     	var goods_total  = goods_num * goods_price;
   
     	var tnum1 = $('#tnum1').val();
  	 // 	var tprice1 = $('#tprice1').val();
     	var tnum = parseInt(tnum1)+1;
+
+
+
     //	var tprice = (parseFloat(tprice1)+parseFloat(goods_price)).toFixed(1);
 		$('#tnum1').val(tnum);
     	$('#tprice1').val(goods_total);
