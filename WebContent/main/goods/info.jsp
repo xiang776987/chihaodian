@@ -204,7 +204,11 @@
 		var order_total = $('#order_total').val();
 		var single_quantity = $('#single_quantity').val();
 
-        goods_detail = goods_detail.replace("&nbsp;"," ");
+        var reg = new RegExp( '&nbsp;' , "g" )
+        goods_detail = goods_detail.replace(reg," ");
+        var reg = new RegExp( '&quot;' , "g" )
+        goods_detail = goods_detail.replace(reg,"");
+        // alert(goods_detail);
         console.log(goods_detail);
 		$.ajax({
 			url:'goodsUpdate.html',
