@@ -14,14 +14,16 @@
  * 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
  * 
  */
-
+	System.out.println("====================================================1121==========================");
 //文件保存目录路径
 String savePath1 = pageContext.getServletContext().getRealPath("") + "main/kindeditor/attached/";
-String savePath = savePath1.substring(0,savePath1.lastIndexOf("\\"))+"/upload/";
+	System.out.println("savePath1:"+savePath1);
+String savePath = savePath1.substring(0,savePath1.lastIndexOf("webapps")+7)+"/upload/";
+
 System.out.println(savePath);
 //文件保存目录URL
 //String saveUrl1  = request.getContextPath() + "/main/kindeditor/attached/";
-//StringBuffer url = request.getRequestURL();  
+//StringBuffer url = request.getRequestURL();
 //String saveUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append("/").append("upload/").toString();
 String saveUrl = request.getContextPath()+"/../upload/";
 System.out.println("saveUrl="+saveUrl);
