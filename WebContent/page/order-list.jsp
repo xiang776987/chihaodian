@@ -198,6 +198,8 @@
             border-left: 1px solid #dedede;
             margin-left:-1px;}
 
+        .my-p2 .my-btn1{margin: 5px 3px;}
+
     </style>
 
 
@@ -212,29 +214,12 @@
     	<h3 class="sjsc-t2l">我的订单</h3>
 
 
-        <div class="dislog" style="display: {{nones}};">
-          <%--  <div>
-                <!--内容-->
-                <div class="dis_cont">
-                    <div  >
-                        <input type="text" id="yzm"
-                               class="input-text" style="width: 80%">
-                        <input type="hidden"  id="yzm_order_id">
-                    </div>
-
-                    <div >
-                        <label class="left_name" onclick="cances()">取消</label>
-                        <label class="right_name" onclick="submits()">确认</label>
-
-                    </div>
-
-                </div>
-            </div>--%>
-
+        <div id="dislog" class="dislog" style="display: {{nones}};">
                 <div class="modal-alert">
                     <div class="modal-alert_nav">
                         <div class="modal-alert-bd">
-                            <input type="text" name="" placeholder="输入验证码">
+                            <input type="text" id="yzm" name="" placeholder="输入验证码">
+                            <input type="hidden"  id="yzm_order_id">
                         </div>
                         <div class="modal-alert-footer">
                             <label class="modal-alert-btn" onclick="submits()">确认</label>
@@ -242,17 +227,21 @@
                         </div>
                     </div>
                 </div>
-
-
         </div>
-       <%-- <div class="cont">
-            <div class="list">
-                <label class="shows" onclick="shows()">显示</label>
-                <label class="nones" onclick="nones()">隐藏</label>
+
+        <div id="msdislog" class="dislog" style="display: {{nones}};">
+            <div class="modal-alert">
+                <div class="modal-alert_nav">
+                    <div class="modal-alert-bd">
+                       <span>核销码错误</span>
+                    </div>
+                    <div class="modal-alert-footer">
+                        <label class="modal-alert-btn" onclick="mscances()">确认</label>
+
+                    </div>
+                </div>
             </div>
-        </div>--%>
-
-
+        </div>
 
         <a href="center.html" class="sjsc-t2r"><img src="images/back.png" alt="" style="width:20px;height: 20px;padding-top: 11px;padding-left: 5px"/></a>
     </div>
@@ -297,11 +286,15 @@
                     		<div style="clear:both;"></div>
                         </div>
                     </dd>
+
                     <div style="clear:both;"></div>
                 </dl>
                 </c:forEach>
                 <div class="my-p2">
                 	<span class="my-sp3 f-l">订单号：${list.order_id}</span>
+                </div>
+                <br/>
+                <div class="my-p2">
                 	<c:if test="${list.status==0 }">
                 <button class="my-btn1 f-r" onclick="window.location.href='payOrder.html?order_id=${list.order_id}'">支付：￥${list.goods_total}</button>
                 	</c:if>
@@ -313,9 +306,10 @@
 
                 	<c:if test="${list.status==1}">
                		    <button class="my-btn1 f-r" onclick="send('${list.order_id}')">退款</button>
+               		    <%--<button class="my-btn1 f-r" onclick="showsMs()">测试</button>--%>
                         <c:if test="${list.is_coupon==1}">
                             <button class="my-btn1 f-r" onclick="qrToggle('${list.qr_image}')">二维码</button>
-                            <button class="my-btn1 f-r" onclick="shows('${list.order_id}')">验证码</button>
+                            <button class="my-btn1 f-r" onclick="shows('${list.order_id}')" style="margin-top: 2px;">验证码</button>
                         </c:if>
                 	</c:if>
 
@@ -452,15 +446,30 @@
     		<script type="text/javascript">
 
                 //显示遮罩弹窗
+                function showsMs(){
+                    // $('#yzm_order_id').val(order_id);
+                    // alert($('#yzm_order_id').val());
+                    $("#msdislog").css("display","block");
+                }
+                //取消
+                function mscances(){
+                    $("#msdislog").css("display","none");
+                }
+
+
+
                 function shows(order_id){
                     $('#yzm_order_id').val(order_id);
                     // alert($('#yzm_order_id').val());
-                    $(".dislog").css("display","block");
+                    $("#dislog").css("display","block");
                 }
                 //隐藏遮罩弹窗
                 function nones(){
-                    $(".dislog").css("display","none");
+                    $("#dislog").css("display","none");
                 }
+              /*  $("#dislog").click(function() {
+                    $(".dislog").fadeOut("slow");
+                })*/
                 function submits(order_id){
 
                     var yzm = $('#yzm').val();
@@ -472,7 +481,7 @@
                         type:'post',
                         data:'yzm='+yzm+'&order_id='+order_id,
                         success:function(rs){
-                            alert(rs);
+                        alert(rs);
                             if (rs=='核销成功'){
                                 window.location.reload(true)
                             }
@@ -515,6 +524,8 @@
             $("#qrcode").click(function() {
                 $("#qrcode").fadeOut("slow");
             })
+
+
     		</script>
 </body>
 </html>
